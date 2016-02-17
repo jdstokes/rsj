@@ -15,6 +15,9 @@ end
 save('/Users/jdstokes/Documents/MATLAB/my_spm.mat','mask');
 spm_my_defaults;
 matlabbatch = Batch_model_trialest(subj,C);
+if isempty(matlabbatch)
+    return
+end
 spm_jobman('initcfg')
 spm('defaults', 'FMRI');
 spm_jobman('serial', matlabbatch);
@@ -38,8 +41,9 @@ opDir = fullfile(dir_analysis, spm_modelName,subj,spm_smooth,['hpf',num2str(spm_
 if ~exist(opDir,'dir')
     mkdir(opDir);
 else
-    if exist(fullfile(opDir,'SPM.mat'),file) >0
+    if exist(fullfile(opDir,'SPM.mat'),'file') >0
         disp([fullfile(opDir,'SPM.mat'),' already exists']);
+        matlabbatch=[];
         return
     end
 end

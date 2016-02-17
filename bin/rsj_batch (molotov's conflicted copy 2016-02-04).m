@@ -15,7 +15,7 @@ else
     error('bad input')
 end
     
-modules = {'rsj_spm_model'};
+modules = {'rsj_spm_pp'};
 
 
 
@@ -61,6 +61,7 @@ end
 %% RSA pipeline 
 function RS_pipeline(subj,C,modules)
 
+
 for i = 1:length(modules)
     disp(modules{i});
     mod_func = str2func(modules{i});
@@ -79,12 +80,12 @@ end
  
  switch opts
      case 'model'
-         options.spm_smooth = {'s2ra','s1ra','ra','s3ra'};
-         options.spm_mask = {'m3','m1','m0'};
-         options.spm_hpf ={50,128};
+         options.spm_smooth = {'s2ra','s1ra','ra','s3ra'};%%'s2ra','s1ra','ra','s3ra'
+         options.spm_mask = {'m8','m3','m1','m0'};
+         options.spm_hpf ={50,128};%%50,128
          options.spm_modelName = {'standard_ST_mr'};
      case 'smooth'
-         options.spm_smooth = {};
+         options.spm_smooth = {'s2ra'};
      case 'rsa'
          options.spm_smooth = {'ra'};
          options.spm_mask = {'m8','m3','m1','m0'};

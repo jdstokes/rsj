@@ -11,7 +11,9 @@ classdef rsj_get_space
     
     methods
         function space = rsj_get_space(C)
-            space.struct={'spm_modelName','spm_hpf','spm_mask','spm_smooth','maskType','betas','rs_feature_mask','scores','ol_v_method','ol_v'};
+            space.struct={'spm_modelName','spm_hpf','spm_mask',...
+                'spm_smooth','maskType','betas','rs_feature_mask',...
+                'scores','ol_v_method','ol_v'};
             space.combs_all = cell(size(space.struct));
             
             path2 = genpath(C.dir.dir_model);
