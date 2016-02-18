@@ -1,4 +1,4 @@
-function tt_all = TT_greco2(subj,C)
+function tt_all = TT_greco(subj,C)
 
 
 format = '.txt';
