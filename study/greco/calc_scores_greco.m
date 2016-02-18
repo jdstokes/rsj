@@ -1,4 +1,4 @@
-function [score,tt_size]=calc_scores_greco(score_name,code,DATA)
+function [score,tt_size]=calc_scores_greco(score_name,code)
  score_type = strsplit(score_name,' ');
     
     %Overall trial cnt

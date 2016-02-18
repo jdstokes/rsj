@@ -37,6 +37,8 @@ classdef rsj_trial_type
                     tt = tt_all.rs_all;
                 case 'spm'
                     tt = tt_all.spm;
+                case 'behav'
+                    tt = tt_all.behav;
             end
         end
         

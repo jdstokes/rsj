@@ -102,7 +102,7 @@ classdef Study_greco < rsj_study
             S.masks.mask2inc = ones(1,length(S.masks.maskAll))==1;
             
             %other
-            S.space = rsj_get_space(S);
+%             S.space = rsj_get_space(S);
             
             S.tt.unpack= rsj_tt_unpack(S);
 

@@ -16,14 +16,14 @@ S =strsplit(subj,'_');
 clear subj
 id = S(2); %shape training signifier
 clear S
-
-
 tt= Get_conditions(tt,id,numTrials);
+
 %% tt_all
 tt_all.rs_pair = tt;
 tt_all.rs_all = GetConditionsRS(tt,numTrials);
 tt_all.spm = GetConditionsSPM(tt,numTrials,dur);%%ttspm;
 tt_all.numTrials = numTrials;
+tt_all.behav = build_codes_greco(tt_all);
 end
 
 function tt = Get_conditions(tt,id,numTrials)
