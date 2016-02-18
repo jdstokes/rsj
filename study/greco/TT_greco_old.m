@@ -1,10 +1,10 @@
-function tt_all = TT_greco2(subj,C)
+function tt_all = TT_greco(subj,C)
 
 
 format = '.txt';
-fileName = fullfile(C.dir.dir_behavioral,subj,[subj,format]); 
+fileName = fullfile(C.dir.dir_behavioral,subj,[subj,format]);
 tt = tdfread(fileName);
-clear C fileName 
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %  Build TT and add additional columns to tt
@@ -13,20 +13,8 @@ numTrials = length(tt.Global_trial_num);
 tt.event = (1:numTrials)';
 dur= 20.0;
 S =strsplit(subj,'_');
-clear subj
 id = S(2); %shape training signifier
 clear S
-
-
-tt= Get_conditions(tt,id,numTrials);
-%% tt_all
-tt_all.rs_pair = tt;
-tt_all.rs_all = GetConditionsRS(tt,numTrials);
-tt_all.spm = GetConditionsSPM(tt,numTrials,dur);%%ttspm;
-tt_all.numTrials = numTrials;
-end
-
-function tt = Get_conditions(tt,id,numTrials)
 
 for i1=1:numTrials;
   
@@ -97,9 +85,20 @@ for i1=1:numTrials;
         tt_code(i1,1) = 99;
     end
     
-  
-end
+    % Build TT
+    ttspm(run).EVENTNUM{tri}= tt.event(i1);
+    ttspm(run).ONSET{tri}= tt.trial_time(i1);
+    ttspm(run).RESPTIME{tri}= tt.resp_time(i1);
+    ttspm(run).DUR{tri}= dur;                                 
+    ttspm(run).RESPONSE{tri}= tt.resp_key(i1);
+    ttspm(run).TT_MAIN{tri}= tt.trial_type(i1);
+    ttspm(run).TT_CURCITY{tri}= tt.currCity(i1);
+    ttspm(run).TT_PRECITY{tri}= tt.priorCity(i1);
+    ttspm(run).TT_CURTARGCITY{tri}= cityTargC(i1);
+    ttspm(run).TT_PRETARGCITY{tri}= cityTargP(i1);
+    ttspm(run).TT_CODE{tri}= tt_code(i1);
 
+end
 
 
 % Add new additional variables to tt
@@ -114,35 +113,11 @@ for i1 = 1:length(vars)
         tt.(vars{i1}) = cellstr(tt.(vars{i1}));
     end
 end
-end
-
-
-function ttspm = GetConditionsSPM(tt,numTrials,dur)
-        for i1=1:numTrials;
-            
-            % Extract run specific trial order number
-            tri = tt.Global_trial_num(i1);
-            % Extract run number
-            run = tt.run_num(i1) +1;
-            ttspm(run).EVENTNUM{tri}= tt.event(i1);
-            ttspm(run).ONSET{tri}= tt.trial_time(i1);
-            ttspm(run).RESPTIME{tri}= tt.resp_time(i1);
-            ttspm(run).DUR{tri}= dur;
-            ttspm(run).RESPONSE{tri}= tt.resp_key(i1);
-            ttspm(run).TT_MAIN{tri}= tt.trial_type(i1);
-            ttspm(run).TT_CURCITY{tri}= tt.currCity(i1);
-            ttspm(run).TT_PRECITY{tri}= tt.priorCity(i1);
-            ttspm(run).TT_CURTARGCITY{tri}= tt.cityTargC(i1);
-            ttspm(run).TT_PRETARGCITY{tri}= tt.cityTargP(i1);
-            ttspm(run).TT_CODE{tri}= tt.tt_code(i1);
-            
-        end
-    end
 
 
 
 
-function ttrs  = GetConditionsRS(tt,numTrials)
+%% RS all
 pairs = nchoosek(1:numTrials,2);
 
 for i = 1:size(pairs,1)
@@ -162,4 +137,13 @@ for i = 1:size(pairs,1)
     ttrs.rs_acc_all(i,1) = tt.acc(x) == 1 & tt.acc(y) == 1;
     ttrs.rs_acc_or(i,1) = tt.acc(x) == 1 | tt.acc(y) == 1;
 end
-end
+
+
+
+%% tt_all
+tt_all.rs_pair = tt;
+tt_all.rs_all = ttrs;
+tt_all.spm = ttspm;
+tt_all.numTrials = numTrials;
+
+
