@@ -1,12 +1,11 @@
 function rsj_batch(varargin)
 % Batch script for the following modules:
-% 'rsj_spm_smooth'
-% 'rsj_spm_model'
-% 'SPM_supermask'
-
+% 'rsj_spm_smooth' 'rsj_spm_model' 'SPM_supermask' 'Maskbetas'
+% 'Calcrs'
+%
 if nargin == 0
 elseif nargin == 1 && iscellstr(varargin)
-    if any(strcmp(varargin{1},{'model','smooth'}))
+    if any(strcmp(varargin{1},{'model','smooth','rsa','special'}))
         options = getOptions(varargin{1});
     else
         error('bad input');
@@ -15,12 +14,38 @@ else
     error('bad input')
 end
     
-modules = {'rsj_spm_model'};
+modules = {'Maskbetas'};
 
-
+subjects= {
+                 'S1_A' %running
+                'S16_A' %running
+                'S4_A' %ra
+                'S5_A' %ra
+                'S6_A'
+                'S7_A'
+                'S9_A'
+                'S8_B'
+                'S10_B'
+                'S11_B'
+                'S12_B'
+                'S15_B'
+                'S13_B'
+                'S14_B'
+                'S2_B' %done
+                'S3_A' %done
+                'S21_B'
+                'S22_B'
+                'S23_B'
+                'S24_A'
+                'S25_A'
+                'S26_B'
+% %                     'S27_A'
+                };
+            
 
 %% load C
 C = Study_greco;
+C.subjects.subjAll = subjects;
 
     if exist('options','var')
     combs = allcombJ(options);
@@ -86,11 +111,17 @@ end
      case 'smooth'
          options.spm_smooth = {};
      case 'rsa'
-         options.spm_smooth = {'ra'};
+         options.spm_smooth = {'s3ra','s2ra','s1ra','ra',};
          options.spm_mask = {'m8','m3','m1','m0'};
          options.spm_hpf ={50,128};
          options.spm_modelName = {'standard_ST_mr'};
-         options.maskType = {'v3.0'};
+         options.maskType = {'v3'};
+     case 'special'
+         options.spm_smooth = {'s1ra'};
+         options.spm_mask = {'m8','m3','m1'};
+         options.spm_hpf ={50};
+         options.spm_modelName = {'standard_ST_mr'};
+         options.maskType = {'v3'};
   
  end
  

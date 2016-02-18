@@ -71,7 +71,7 @@ classdef Study_greco < rsj_study
                 'S24_A'
                 'S25_A'
                 'S26_B'
-                    'S27_A'
+%                     'S27_A'
                 };
             
             
