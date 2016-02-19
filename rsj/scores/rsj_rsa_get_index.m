@@ -32,6 +32,7 @@ end
             for ii = 1:length(ts.(vars.I{i}))
                 if ~isempty(ts.(vars.I{i}))
                     if iscell(behav.(vars.I{i}))
+                        behav
                         inds_all{i}(1:indlen,ii)= strcmp(ts.(vars.I{i})(ii),behav.(vars.I{i}));
                     end
                     if isnumeric(behav.(vars.I{i})) || islogical(behav.(vars.I{i}))

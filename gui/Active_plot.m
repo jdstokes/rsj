@@ -176,6 +176,9 @@ var_name = hObj.String{hObj.Value};
 h = GetLBString(var_name,h,hObj.Tag);
 guidata(hObj, h);
 end
+function tt_pm1_CreateFcn(hObj,ed,h)
+
+end
 %% ChangeMeasure Callback
 function pu_Measure_Callback(hObj, ed, h)
 measure = hObj.String{hObj.Value};

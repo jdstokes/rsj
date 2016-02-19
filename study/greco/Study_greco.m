@@ -5,7 +5,7 @@ classdef Study_greco < rsj_study
 
             S.name = 'greco';
             % Directories
-            S.dir.dir_main = '/Users/jdstokes/';
+            S.dir.dir_main = '/Volumes/jdstokes/';
             S.dir.dir_config =      fullfile(S.dir.dir_main,'Dropbox/Repos/projects/sGR/mlb/');
             S.dir.dir_model =       fullfile(S.dir.dir_main,'Dropbox/Data/dGR/analysis/rs/ind/');
             S.dir.dir_rs =          fullfile(S.dir.dir_main,'Dropbox/Data/dGR/analysis/rs/ind/');
@@ -25,8 +25,8 @@ classdef Study_greco < rsj_study
             S.spm.spm_coregFile = 'func_run1/ra0001epihippoperprunX4.nii,1';
             S.spm.spm_modelName ='standard_ST_mr';%
             S.spm.spm_hpf = 50;%128
-            S.spm.spm_smooth ='s3ra';
-            S.spm.spm_mask = 'm3';
+            S.spm.spm_smooth ='s2ra';
+            S.spm.spm_mask = 'm8';
             
             % TT
              S.tt.tt_trials = ones(1,4)*25;            
@@ -65,12 +65,12 @@ classdef Study_greco < rsj_study
                 'S14_B'
                 'S2_B' %done
                 'S3_A' %done
-                'S21_B'
-                'S22_B'
-                'S23_B'
-                'S24_A'
-                'S25_A'
-                'S26_B'
+%                 'S21_B'
+%                 'S22_B'
+% %                 'S23_B' % 99 trials
+% %                  'S24_A'
+%                  'S25_A'
+%                  'S26_B'
 %                     'S27_A'
                 };
             
@@ -78,7 +78,7 @@ classdef Study_greco < rsj_study
             S.subjects.subj2inc =  ones(1,length(S.subjects.subjAll))==1;
             
             
-            S.masks.maskType = 'v1a';%'v3.0'
+            S.masks.maskType = 'v3';%'v3.0'
             
             S.masks.maskAll ={
                 'L_CA1.nii'

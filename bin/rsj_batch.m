@@ -14,7 +14,7 @@ else
     error('bad input')
 end
     
-modules = {'Maskbetas'};
+modules = {'Calcrs'};
 
 subjects= {
                  'S1_A' %running
@@ -62,8 +62,9 @@ end
 
 %% Group analysis batch
 function RunGroup(C,varNames,mode,modules)
-
+mode
  for i = 1:length(varNames)
+   
    ChangeVar(C,varNames{i},mode{i});
  end
  
@@ -89,7 +90,11 @@ function RS_pipeline(subj,C,modules)
 for i = 1:length(modules)
     disp(modules{i});
     mod_func = str2func(modules{i});
+    try
     mod_func(subj,C)
+    catch me
+        [subj,' error']
+    end
 end
 end
 
