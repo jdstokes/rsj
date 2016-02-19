@@ -5,7 +5,7 @@ classdef Study_greco < rsj_study
 
             S.name = 'greco';
             % Directories
-            S.dir.dir_main = '/Volumes/jdstokes/';
+            S.dir.dir_main = '/Users/jdstokes/';
             S.dir.dir_config =      fullfile(S.dir.dir_main,'Dropbox/Repos/projects/sGR/mlb/');
             S.dir.dir_model =       fullfile(S.dir.dir_main,'Dropbox/Data/dGR/analysis/rs/ind/');
             S.dir.dir_rs =          fullfile(S.dir.dir_main,'Dropbox/Data/dGR/analysis/rs/ind/');
@@ -65,8 +65,8 @@ classdef Study_greco < rsj_study
                 'S14_B'
                 'S2_B' %done
                 'S3_A' %done
-%                 'S21_B'
-%                 'S22_B'
+                'S21_B'
+                'S22_B'
 % %                 'S23_B' % 99 trials
 % %                  'S24_A'
 %                  'S25_A'
