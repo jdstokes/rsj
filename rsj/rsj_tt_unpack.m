@@ -10,7 +10,7 @@ classdef rsj_tt_unpack
     end
 methods
     function tt_unpack = rsj_tt_unpack(C)
-        
+        %Based off of first ssubject
         rs_pair = rsj_trial_type(C.subjects.subjAll{1},C,'rs_pair').Get_tt;
         rs_all = rsj_trial_type(C.subjects.subjAll{1},C,'rs_all').Get_tt;
         behav = rsj_trial_type(C.subjects.subjAll{1},C,'behav').Get_tt;

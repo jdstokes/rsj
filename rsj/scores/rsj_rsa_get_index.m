@@ -2,22 +2,22 @@ function index = rsj_rsa_get_index(ts,behav,C)
 
 vars.F = fieldnames(behav);%Get fields
 vars.I = fieldnames(ts);%Get fields
-
+numTrials = length(behav.(vars.F{1}));
 
 switch C.tt.mode
     case 'rs_pair'
-        inds = BuildIndex(NumTrials(C));
-        id = nchoosek(1:NumTrials(C),2);
+        inds = BuildIndex(numTrials);
+        id = nchoosek(1:numTrials,2);
         ind_pair = abs(id(:,1) - id(:,2)) ==1;
         index = logical(inds(id(:,2)).*ind_pair);
     case 'rs_all'
-        numPairs = nchoosek(NumTrials(C),2);
+        numPairs = nchoosek(numTrials,2);
         inds = BuildIndex(numPairs);
-        id = nchoosek(1:NumTrials(C),2);
+        id = nchoosek(1:numTrials,2);
         ind_non_pair = abs(id(:,1) - id(:,2)) ~=1;
         index = logical(inds.*ind_non_pair);
     case 'uni'
-        inds = BuildIndex(NumTrials(C));
+        inds = BuildIndex(numTrials);
         index = logical(inds);
     otherwise
         error('incorrect mode');

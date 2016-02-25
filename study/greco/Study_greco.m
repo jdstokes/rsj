@@ -29,7 +29,7 @@ classdef Study_greco < rsj_study
             S.spm.spm_mask = 'm8';
             
             % TT
-             S.tt.tt_trials = ones(1,4)*25;            
+%              S.tt.tt_trials = ones(1,4)*25;            
 %             S.tt.tt_trials = [24,25,25,25];
             S.tt.mode = 'rs_pair';
             S.tt.score_type = 'rsz';
@@ -67,8 +67,8 @@ classdef Study_greco < rsj_study
                 'S3_A' %done
                 'S21_B'
                 'S22_B'
-% %                 'S23_B' % 99 trials
-% %                  'S24_A'
+                'S23_B' % 99 trials
+%                 'S24_A'
 %                  'S25_A'
 %                  'S26_B'
 %                     'S27_A'

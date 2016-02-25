@@ -18,6 +18,8 @@ classdef rsj_study < handle
         end
     end
     
+    
+    %Study specific methods
     methods
       %subjects
       function x = GetSubj(obj)
@@ -57,10 +59,6 @@ classdef rsj_study < handle
 
         end
        
-       %% trial
-       function x = NumTrials(obj)
-           x = sum(obj.tt.tt_trials);
-       end
         
        function x = GetTrialsInd(obj) 
            x = 1:sum(obj.tt.tt_trials);

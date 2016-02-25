@@ -26,7 +26,7 @@ for i=subjInd   %Cycle through subject indices
         a = rsj_grab(subj,C,T,behav);
         if length(subjInd) > 1
             
-       i
+     
             sco_allvox = Get_scores(a);
             if size(sco_allvox,1) >1
                 scores = mean(sco_allvox,'omitnan');
