@@ -19,14 +19,18 @@ matchedFile = C.spm.spm_matchedFile;
 coregFile = C.spm.spm_coregFile;
 
 
-matlabbatch{1}.spm.spatial.coreg.estimate.ref = {fullfile(dir_mri,subj,coregFile)};
-matlabbatch{1}.spm.spatial.coreg.estimate.source = {fullfile(dir_mri,subj,matchedFold,matchedFile)};
-matlabbatch{1}.spm.spatial.coreg.estimate.other = {''};
-matlabbatch{1}.spm.spatial.coreg.estimate.eoptions.cost_fun = 'nmi';
-matlabbatch{1}.spm.spatial.coreg.estimate.eoptions.sep = [4 2];
-matlabbatch{1}.spm.spatial.coreg.estimate.eoptions.tol = [0.02 0.02 0.02 0.001 0.001 0.001 0.01 0.01 0.01 0.001 0.001 0.001];
-matlabbatch{1}.spm.spatial.coreg.estimate.eoptions.fwhm = [7 7];
-matlabbatch{2}.spm.spatial.coreg.estwrite.ref(1) = cfg_dep('Coregister: Estimate: Coregistered Images', substruct('.','val', '{}',{1}, '.','val', '{}',{1}, '.','val', '{}',{1}, '.','val', '{}',{1}), substruct('.','cfiles'));
+matlabbatch{1}.spm.spatial.coreg.estwrite.ref = {fullfile(dir_mri,subj,coregFile)};
+matlabbatch{1}.spm.spatial.coreg.estwrite.source = {fullfile(dir_mri,subj,matchedFold,matchedFile)};
+matlabbatch{1}.spm.spatial.coreg.estwrite.other = {''};
+matlabbatch{1}.spm.spatial.coreg.estwrite.eoptions.cost_fun = 'nmi';
+matlabbatch{1}.spm.spatial.coreg.estwrite.eoptions.sep = [4 2];
+matlabbatch{1}.spm.spatial.coreg.estwrite.eoptions.tol = [0.02 0.02 0.02 0.001 0.001 0.001 0.01 0.01 0.01 0.001 0.001 0.001];
+matlabbatch{1}.spm.spatial.coreg.estwrite.eoptions.fwhm = [7 7];
+matlabbatch{1}.spm.spatial.coreg.estwrite.roptions.interp = 4;
+matlabbatch{1}.spm.spatial.coreg.estwrite.roptions.wrap = [0 0 0];
+matlabbatch{1}.spm.spatial.coreg.estwrite.roptions.mask = 0;
+matlabbatch{1}.spm.spatial.coreg.estwrite.roptions.prefix = 'r';
+matlabbatch{2}.spm.spatial.coreg.estwrite.ref(1) = cfg_dep('Coregister: Estimate & Reslice: Resliced Images', substruct('.','val', '{}',{1}, '.','val', '{}',{1}, '.','val', '{}',{1}, '.','val', '{}',{1}), substruct('.','rfiles'));
 matlabbatch{2}.spm.spatial.coreg.estwrite.source = {fullfile(dir_mri,subj,hiresFold,hiresFile)};
 matlabbatch{2}.spm.spatial.coreg.estwrite.other = BuildMasks(subj,C);
 matlabbatch{2}.spm.spatial.coreg.estwrite.eoptions.cost_fun = 'nmi';
@@ -36,6 +40,8 @@ matlabbatch{2}.spm.spatial.coreg.estwrite.eoptions.fwhm = [7 7];
 matlabbatch{2}.spm.spatial.coreg.estwrite.roptions.interp = 4;
 matlabbatch{2}.spm.spatial.coreg.estwrite.roptions.wrap = [0 0 0];
 matlabbatch{2}.spm.spatial.coreg.estwrite.roptions.mask = 0;
+matlabbatch{2}.spm.spatial.coreg.estwrite.roptions.prefix = 'r';
+
 matlabbatch{2}.spm.spatial.coreg.estwrite.roptions.prefix = 'r';
 
 

@@ -67,7 +67,7 @@ classdef Study_greco < rsj_study
                 'S3_A' %done
                 'S21_B'
                 'S22_B'
-                'S23_B' % 99 trials
+%                 'S23_B' % 99 trials
 %                 'S24_A'
 %                  'S25_A'
 %                  'S26_B'
