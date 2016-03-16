@@ -17,6 +17,8 @@ classdef Study_greco < rsj_study
             % SPM
             S.spm.spm_funcFold = 'func_run';
             S.spm.spm_funcFile = '0001epihippoperprunX4.nii';
+            S.spm.spm_mprageFold = 'mprage';
+            S.spm.spm_mprageFile = '0001mpragesagNS';
             S.spm.spm_hiresFold = 'hires';
             S.spm.spm_hiresFile = '0001t2tsehippoperp.nii';
             S.spm.spm_matchedFold = 'matched';
@@ -29,8 +31,8 @@ classdef Study_greco < rsj_study
             S.spm.spm_mask = 'm8';
             
             % TT
-%              S.tt.tt_trials = ones(1,4)*25;            
-%             S.tt.tt_trials = [24,25,25,25];
+%           S.tt.tt_trials = ones(1,4)*25;            
+%           S.tt.tt_trials = [24,25,25,25];
             S.tt.mode = 'rs_pair';
             S.tt.score_type = 'rsz';
             S.rs.rs_calcOpts = {'Get_scores_rs_pair','Get_scores_rs_all','Get_scores_uni'};
@@ -42,36 +44,36 @@ classdef Study_greco < rsj_study
             
             % outlier
             S.ol.ol_v_method = 'mask';
-            S.ol.ol_v = 'IQRm';
+            S.ol.ol_v = '2SDm';
             S.ol.ol_rs ='IQRm';
             
             
 %             S.subjects.subjAll = {'S1_A','S16_A','S4_A','S5_A','S6_A','S7_A','S9_A',...
 %                 'S8_B','S10_B','S11_B','S12_B','S15_B','S13_B' ,'S14_B','S2_B','S3_A','S21_B','S22_B','S23_B'};
             S.subjects.subjAll = {
-                 'S1_A' %running
-                'S16_A' %running
-                'S4_A' %ra
-                'S5_A' %ra
+                 'S1_A' 
+                 'S2_B' 
+                 'S3_A'        
+                'S4_A'
+                'S5_A' 
                 'S6_A'
                 'S7_A'
-                'S9_A'
                 'S8_B'
+                'S9_A'
                 'S10_B'
                 'S11_B'
                 'S12_B'
-                'S15_B'
                 'S13_B'
                 'S14_B'
-                'S2_B' %done
-                'S3_A' %done
+                'S15_B'
+                'S16_A' 
                 'S21_B'
                 'S22_B'
-%                 'S23_B' % 99 trials
-%                 'S24_A'
-%                  'S25_A'
+                'S23_B' % 99 trials
+                'S24_A'
+%                 'S25_A'
 %                  'S26_B'
-%                     'S27_A'
+%                  'S27_A'
                 };
             
             
@@ -101,10 +103,10 @@ classdef Study_greco < rsj_study
             
             S.masks.mask2inc = ones(1,length(S.masks.maskAll))==1;
             
-            %other
-%             S.space = rsj_get_space(S);
+         
+             S.space = rsj_get_space(S);
             
-            S.tt.unpack= rsj_tt_unpack(S);
+%             S.tt.unpack= rsj_tt_unpack(S);
 
         end
     end

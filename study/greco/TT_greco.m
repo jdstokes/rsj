@@ -9,11 +9,17 @@ clear C fileName
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %  Build TT and add additional columns to tt
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%Calculate number of trials. maybe unique to subject
 numTrials = length(tt.Global_trial_num);
+numTrialsByRun = [sum(tt.run_num ==0),sum(tt.run_num ==1),...
+                  sum(tt.run_num ==2),sum(tt.run_num ==3)];
+
+
+
 tt.event = (1:numTrials)';
 dur= 20.0;
 S =strsplit(subj,'_');
-clear subj
+
 id = S(2); %shape training signifier
 clear S
 tt= Get_conditions(tt,id,numTrials);
@@ -23,7 +29,10 @@ tt_all.rs_pair = tt;
 tt_all.rs_all = GetConditionsRS(tt,numTrials);
 tt_all.spm = GetConditionsSPM(tt,numTrials,dur);%%ttspm;
 tt_all.numTrials = numTrials;
+tt_all.numTrialsByRun = numTrialsByRun;
 tt_all.behav = build_codes_greco(tt_all);
+
+% tt_all.behav_xtra_scores = build_extra_scores_greco(subj);
 end
 
 function tt = Get_conditions(tt,id,numTrials)
@@ -144,14 +153,18 @@ function ttspm = GetConditionsSPM(tt,numTrials,dur)
 
 function ttrs  = GetConditionsRS(tt,numTrials)
 pairs = nchoosek(1:numTrials,2);
-
+ttrs.ind_non_pair = abs(pairs(:,1) - pairs(:,2)) ~=1;
 for i = 1:size(pairs,1)
     x = pairs(i,1);
     y = pairs(i,2);
     
     ttrs.rs_withinrun(i,1)  = tt.run_num(x) == tt.run_num(y);
     ttrs.rs_pair_code(i,1)  = abs(tt.currCity(x) - tt.currCity(y));
-  
+    ttrs.run1(i,1)  = tt.run_num(x) ==0 &   tt.run_num(y) ==0;
+    ttrs.run2(i,1)  = tt.run_num(x) ==1 &   tt.run_num(y) ==1;
+    ttrs.run3(i,1)  = tt.run_num(x) ==2 &   tt.run_num(y) ==2;
+    ttrs.run4(i,1)  = tt.run_num(x) ==3 &   tt.run_num(y) ==3;
+    
     ttrs.rs_tt_same(i,1) = tt.tt_code(x) ==0 &   tt.tt_code(y) ==0;
     ttrs.rs_tt_diff1(i,1) = tt.tt_code(x) ==1 &  tt.tt_code(y) ==1;
     ttrs.rs_tt_diff2(i,1) = tt.tt_code(x) ==2 &  tt.tt_code(y) ==2;
@@ -162,4 +175,5 @@ for i = 1:size(pairs,1)
     ttrs.rs_acc_all(i,1) = tt.acc(x) == 1 & tt.acc(y) == 1;
     ttrs.rs_acc_or(i,1) = tt.acc(x) == 1 | tt.acc(y) == 1;
 end
+
 end
