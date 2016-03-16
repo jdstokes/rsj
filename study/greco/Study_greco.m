@@ -6,13 +6,13 @@ classdef Study_greco < rsj_study
             S.name = 'greco';
             % Directories
             S.dir.dir_main = '/Users/jdstokes/';
-            S.dir.dir_config =      fullfile(S.dir.dir_main,'Dropbox/Repos/projects/sGR/mlb/');
-            S.dir.dir_model =       fullfile(S.dir.dir_main,'Dropbox/Data/dGR/analysis/rs/ind/');
-            S.dir.dir_rs =          fullfile(S.dir.dir_main,'Dropbox/Data/dGR/analysis/rs/ind/');
-            S.dir.dir_analysis =    fullfile(S.dir.dir_main,'Dropbox/Data/dGR/analysis/models/');
-            S.dir.dir_behavioral =  fullfile(S.dir.dir_main,'Dropbox/Data/dGR/behav/behav_scan/');
-            S.dir.dir_mask =        fullfile(S.dir.dir_main,'Dropbox/Data/dGR/rois/');
-            S.dir.dir_mri=          fullfile(S.dir.dir_main,'Dropbox/Data/dGR/mri');
+            S.dir.dir_config =      fullfile(S.dir.dir_main,'Study/Repos/projects/sGR/mlb/');
+            S.dir.dir_model =       fullfile(S.dir.dir_main,'Study/Data/dGR/analysis/rs/ind/');
+            S.dir.dir_rs =          fullfile(S.dir.dir_main,'Study/Data/dGR/analysis/rs/ind/');
+            S.dir.dir_analysis =    fullfile(S.dir.dir_main,'Study/Data/dGR/analysis/models/');
+            S.dir.dir_behavioral =  fullfile(S.dir.dir_main,'Study/Data/dGR/behav/behav_scan/');
+            S.dir.dir_mask =        fullfile(S.dir.dir_main,'Study/Data/dGR/rois/');
+            S.dir.dir_mri=          fullfile(S.dir.dir_main,'Study/Data/dGR/mri');
             
             % SPM
             S.spm.spm_funcFold = 'func_run';
