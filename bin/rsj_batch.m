@@ -2,7 +2,7 @@ function rsj_batch(varargin)
 % Batch script for the following modules:
 % 'rsj_spm_smooth' 'rsj_spm_model' 'SPM_supermask' 'Maskbetas'
 % 'Calcrs'
-% 'rsj_spm_segment_mprage'
+% 'rsj_spm_segment_mprage'   ,'rsj_spm_specs' , 'rsj_spm_model_byRun' 'rsj_spm_model_byRunNoMR'
 if nargin == 0
 elseif nargin == 1 && iscellstr(varargin)
     if any(strcmp(varargin{1},{'model','smooth','rsa','special'}))
@@ -14,7 +14,7 @@ else
     error('bad input')
 end
     
-modules = {'rsj_spm_supermask'};
+modules = {'rsj_spm_specs'};
 
 subjects= {
         'S1_A'
@@ -39,7 +39,7 @@ subjects= {
         'S24_A'
         'S25_A'
         'S26_B'
-        'S27_A'
+%         'S27_A'
                 };
             
 
@@ -93,7 +93,7 @@ for i = 1:length(modules)
     try
     mod_func(subj,C)
     catch me
-        disp([subj,' error: ', me]);
+        disp(me);
     end
 end
 end

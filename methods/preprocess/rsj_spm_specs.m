@@ -3,7 +3,7 @@ function rsj_spm_specs(subj,C)
 
 
 
-modelNames = {'standard_ST_mr_byRun'}; %standard_CW_perf standard_ST_mr standard_ST_mr_byRun
+modelNames = {'standard_ST_mr_byRun_fir'}; %standard_CW_perf standard_ST_mr standard_ST_mr_byRun
 
 
 tt_all =  TT_greco(subj,C);
@@ -45,11 +45,30 @@ for curModel=1:length(modelNames)
                 durations = tt(run).DUR;
                 
                 if ~exist(fullfile(C.dir.dir_analysis,'specs',modelNames{curModel},subj),'dir')
-                    mkdir(fullfile(C.dir.dir_analysis,'specs',modelNames{curModel},['Run',num2str(run)],subj));
+                    mkdir(fullfile(C.dir.dir_analysis,'specs',modelNames{curModel},subj));
                 end
                 save(fullfile(C.dir.dir_analysis,'specs',modelNames{curModel},subj,[subj,'_Run',sprintf('%i',run)]),'names', 'onsets', 'durations')
                 
             end
+            
+          case{'standard_ST_mr_byRun_fir'}
+  
+              names = {'fir_trial'};
+
+              for run = 1:length(tt)
+%                   for tri = 1:length(tt(run).EVENTNUM)
+%                   end
+                  
+                  
+                  onsets = {cell2mat(tt(run).ONSET)};
+                  durations = {zeros(size(tt(run).ONSET))};
+                  
+                  if ~exist(fullfile(C.dir.dir_analysis,modelNames{curModel},subj),'dir')
+                      mkdir(fullfile(C.dir.dir_analysis,modelNames{curModel},subj));
+                  end
+                  save(fullfile(C.dir.dir_analysis,modelNames{curModel},subj,[subj,'_Run',sprintf('%i',run)]),'names', 'onsets', 'durations')
+                  
+              end
             
         case{'standard_CW_perf'}
             

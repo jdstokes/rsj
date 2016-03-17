@@ -5,14 +5,14 @@ classdef Study_greco < rsj_study
 
             S.name = 'greco';
             % Directories
-            S.dir.dir_main = '/Users/jdstokes/';
-            S.dir.dir_config =      fullfile(S.dir.dir_main,'Studies/Repos/projects/sGR/mlb/');
-            S.dir.dir_model =       fullfile(S.dir.dir_main,'Studies/Data/dGR/analysis/rs/ind/');
-            S.dir.dir_rs =          fullfile(S.dir.dir_main,'Studies/Data/dGR/analysis/rs/ind/');
-            S.dir.dir_analysis =    fullfile(S.dir.dir_main,'Studies/Data/dGR/analysis/models/');
-            S.dir.dir_behavioral =  fullfile(S.dir.dir_main,'Studies/Data/dGR/behav/behav_scan/');
-            S.dir.dir_mask =        fullfile(S.dir.dir_main,'Studies/Data/dGR/rois/');
-            S.dir.dir_mri=          fullfile(S.dir.dir_main,'Studies/Data/dGR/mri');
+            S.dir.dir_main = '/Users/jdstokes/Study';
+%             S.dir.dir_config =      fullfile(S.dir.dir_main,'Studies/Repos/projects/sGR/mlb/');
+            S.dir.dir_model =       fullfile(S.dir.dir_main,'/Data/dGR/analysis/rs/ind/');
+            S.dir.dir_rs =          fullfile(S.dir.dir_main,'/Data/dGR/analysis/rs/ind/');
+            S.dir.dir_analysis =    fullfile(S.dir.dir_main,'/Data/dGR/analysis/models/');
+            S.dir.dir_behavioral =  fullfile(S.dir.dir_main,'/Data/dGR/behav/behav_scan/');
+            S.dir.dir_mask =        fullfile(S.dir.dir_main,'/Data/dGR/rois/');
+            S.dir.dir_mri=          fullfile(S.dir.dir_main,'/Data/dGR/mri');
             
             % SPM
             S.spm.spm_funcFold = 'func_run';
@@ -25,10 +25,10 @@ classdef Study_greco < rsj_study
             S.spm.spm_matchedFile = '0001epsegsematched.nii';
             S.spm.spm_motionFile = 'rp_a0001epihippoperprunX4.txt';
             S.spm.spm_coregFile = 'func_run1/ra0001epihippoperprunX4.nii,1';
-            S.spm.spm_modelName ='standard_ST_mr';%
+            S.spm.spm_modelName ='standard_ST_mr_byRun_fir';%
             S.spm.spm_hpf = 50;%128
             S.spm.spm_smooth ='s2ra';
-            S.spm.spm_mask = 'm8';
+            S.spm.spm_mask = 'm3';
             
             % TT
 %           S.tt.tt_trials = ones(1,4)*25;            
