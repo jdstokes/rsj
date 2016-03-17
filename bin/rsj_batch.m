@@ -2,7 +2,7 @@ function rsj_batch(varargin)
 % Batch script for the following modules:
 % 'rsj_spm_smooth' 'rsj_spm_model' 'SPM_supermask' 'Maskbetas'
 % 'Calcrs'
-%
+% 'rsj_spm_segment_mprage'
 if nargin == 0
 elseif nargin == 1 && iscellstr(varargin)
     if any(strcmp(varargin{1},{'model','smooth','rsa','special'}))
@@ -14,7 +14,7 @@ else
     error('bad input')
 end
     
-modules = {'Calcrs'};
+modules = {'rsj_spm_segment_mprage'};
 
 subjects= {
                  'S1_A' %running
@@ -38,8 +38,8 @@ subjects= {
                 'S23_B'
                 'S24_A'
                 'S25_A'
-%                  'S26_B'
-% % %                     'S27_A'
+                 'S26_B'
+                    'S27_A'
                 };
             
 
@@ -62,7 +62,7 @@ end
 
 %% Group analysis batch
 function RunGroup(C,varNames,mode,modules)
-mode
+disp(mode);
  for i = 1:length(varNames)
    
    ChangeVar(C,varNames{i},mode{i});
