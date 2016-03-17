@@ -45,7 +45,7 @@ for curModel=1:length(modelNames)
                 durations = tt(run).DUR;
                 
                 if ~exist(fullfile(C.dir.dir_analysis,'specs',modelNames{curModel},subj),'dir')
-                    mkdir(fullfile(C.dir.dir_analysis,'specs',modelNames{curModel},['Run',num2str(run)],subj));
+                    mkdir(fullfile(C.dir.dir_analysis,'specs',modelNames{curModel},'Run',subj));
                 end
                 save(fullfile(C.dir.dir_analysis,'specs',modelNames{curModel},subj,[subj,'_Run',sprintf('%i',run)]),'names', 'onsets', 'durations')
                 
