@@ -14,7 +14,7 @@ else
     error('bad input')
 end
     
-modules = {'rsj_spm_specs'};
+modules = {'rsj_spm_model_byRunNoMR_FIR'};
 
 subjects= {
         'S1_A'
@@ -38,7 +38,7 @@ subjects= {
         'S23_B'
         'S24_A'
         'S25_A'
-        'S26_B'
+%         'S26_B'
 %         'S27_A'
                 };
             

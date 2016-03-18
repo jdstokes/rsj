@@ -63,10 +63,10 @@ for curModel=1:length(modelNames)
                   onsets = {cell2mat(tt(run).ONSET)};
                   durations = {zeros(size(tt(run).ONSET))};
                   
-                  if ~exist(fullfile(C.dir.dir_analysis,modelNames{curModel},subj),'dir')
-                      mkdir(fullfile(C.dir.dir_analysis,modelNames{curModel},subj));
+                  if ~exist(fullfile(C.dir.dir_analysis,'standard_ST_mr_byRun_fir',subj),'dir')
+                      mkdir(fullfile(C.dir.dir_analysis,'standard_ST_mr_byRun_fir',subj));
                   end
-                  save(fullfile(C.dir.dir_analysis,modelNames{curModel},subj,[subj,'_Run',sprintf('%i',run)]),'names', 'onsets', 'durations')
+                  save(fullfile(C.dir.dir_analysis,'standard_ST_mr_byRun_fir',subj,[subj,'_Run',sprintf('%i',run)]),'names', 'onsets', 'durations')
                   
               end
             

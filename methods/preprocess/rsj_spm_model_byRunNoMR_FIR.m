@@ -36,6 +36,9 @@ end
 
 function [matlabbatch]=Batch_model_trialest(subj,C,runNum)
 
+dir_mask =C.dir.dir_mask;
+maskAll = C.masks.maskAll;
+maskType = C.masks.maskType;
 
 dir_mri = GetValue(C,'dir_mri');
 dir_analysis = GetValue(C,'dir_analysis');
@@ -61,15 +64,14 @@ else
 end
 matlabbatch{1}.spm.util.exp_frames.files = {fullfile(dir_mri,subj,[spm_funcFold,num2str(runNum)],[spm_smooth,spm_funcFile])};
 matlabbatch{1}.spm.util.exp_frames.frames = Inf;
-matlabbatch{2}.spm.stats.fmri_spec.dir = {'/Users/jdstokes/Dropbox/Data/dGR/analysis/models/standard_ST_mr_byRun_fir/S16_A'};
-matlabbatch{2}.spm.stats.fmri_spec.timing.units = {opDir};
+matlabbatch{2}.spm.stats.fmri_spec.dir = {opDir};
+matlabbatch{2}.spm.stats.fmri_spec.timing.units = 'secs';
 matlabbatch{2}.spm.stats.fmri_spec.timing.RT = 3;
 matlabbatch{2}.spm.stats.fmri_spec.timing.fmri_t = 16;
 matlabbatch{2}.spm.stats.fmri_spec.timing.fmri_t0 = 8;
 matlabbatch{2}.spm.stats.fmri_spec.sess.scans(1) = cfg_dep('Expand image frames: Expanded filename list.', substruct('.','val', '{}',{1}, '.','val', '{}',{1}, '.','val', '{}',{1}), substruct('.','files'));
 matlabbatch{2}.spm.stats.fmri_spec.sess.cond = struct('name', {}, 'onset', {}, 'duration', {}, 'tmod', {}, 'pmod', {}, 'orth', {});
-matlabbatch{2}.spm.stats.fmri_spec.sess.multi = {fullfile(dir_analysis ,spm_modelName,subj,[subj,'_Run',...
-                                                                  num2str(runNum), '.mat'])}; 
+matlabbatch{2}.spm.stats.fmri_spec.sess.multi = {fullfile(dir_analysis ,spm_modelName,subj,[subj,'_Run',num2str(runNum), '.mat'])}; 
 matlabbatch{2}.spm.stats.fmri_spec.sess.regress = struct('name', {}, 'val', {});
 matlabbatch{2}.spm.stats.fmri_spec.sess.multi_reg = {''};
 matlabbatch{2}.spm.stats.fmri_spec.sess.hpf = 128;
@@ -79,7 +81,7 @@ matlabbatch{2}.spm.stats.fmri_spec.bases.fir.order = 10;
 matlabbatch{2}.spm.stats.fmri_spec.volt = 1;
 matlabbatch{2}.spm.stats.fmri_spec.global = 'None';
 matlabbatch{2}.spm.stats.fmri_spec.mthresh = 0.3;
-matlabbatch{2}.spm.stats.fmri_spec.mask = {''};
+matlabbatch{2}.spm.stats.fmri_spec.mask = {fullfile(dir_mask,maskType,subj,'super_mask.nii')};
 matlabbatch{2}.spm.stats.fmri_spec.cvi = 'AR(1)';
 matlabbatch{3}.spm.stats.fmri_est.spmmat(1) = cfg_dep('fMRI model specification: SPM.mat File', substruct('.','val', '{}',{2}, '.','val', '{}',{1}, '.','val', '{}',{1}), substruct('.','spmmat'));
 matlabbatch{3}.spm.stats.fmri_est.write_residuals = 0;

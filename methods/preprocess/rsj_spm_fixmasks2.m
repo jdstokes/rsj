@@ -12,6 +12,8 @@ end
 
 function [matlabbatch]=batch_spec_template(subj,C)
 dir_mri = C.dir.dir_mri;
+dir_mask =C.dir.dir_mask;
+
 hiresFold = C.spm.spm_hiresFold;
 hiresFile = C.spm.spm_hiresFile;
 matchedFold = C.spm.spm_matchedFold;
