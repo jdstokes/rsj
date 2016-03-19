@@ -40,8 +40,7 @@ subjects= {
         'S23_B'
         'S24_A'
         'S25_A'
-%         'S26_B'
-%         'S27_A'
+
                 };
             
 
@@ -79,6 +78,7 @@ end
 function RS_batch(C,modules)
 
 subjects = GetValue(C,'subjAll');
+% parpool(4)
 for i = 1:length(subjects)
     disp(subjects{i});
     RS_pipeline(subjects{i},C,modules)

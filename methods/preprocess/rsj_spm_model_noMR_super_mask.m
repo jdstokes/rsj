@@ -50,7 +50,8 @@ if ~exist(opDir,'dir')
 else
     if exist(fullfile(opDir,'SPM.mat'),'file') >0
         disp([fullfile(opDir,'SPM.mat'),' already exists']);
-        return
+        delete(fullfile(opDir,'SPM.mat'));
+%         return
     end
 end
 for curRun = 1:numRuns
@@ -79,7 +80,7 @@ for curRun=1:numRuns
     matlabbatch{specNum}.spm.stats.fmri_spec.sess(curRun).multi = {fullfile(dir_analysis ,spm_modelName,subj,[subj,'_Run',...
                                                                     num2str(curRun), '.mat'])};    
     matlabbatch{specNum}.spm.stats.fmri_spec.sess(curRun).regress = struct('name', {}, 'val', {});
-    matlabbatch{specNum}.spm.stats.fmri_spec.sess(curRun).multi_reg = {};
+    matlabbatch{specNum}.spm.stats.fmri_spec.sess(curRun).multi_reg = {''};
     matlabbatch{specNum}.spm.stats.fmri_spec.sess(curRun).hpf = spm_hpf;  
 end
 
