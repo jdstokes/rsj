@@ -5,7 +5,7 @@ classdef Study_greco < rsj_study
 
             S.name = 'greco';
             % Directories
-            S.dir.dir_main = '/Users/jdstokes/Dropbox';
+            S.dir.dir_main = '/Users/jdstokes/Studies';
 %             S.dir.dir_config =      fullfile(S.dir.dir_main,'Studies/Repos/projects/sGR/mlb/');
             S.dir.dir_model =       fullfile(S.dir.dir_main,'/Data/dGR/analysis/rs/ind/');
             S.dir.dir_rs =          fullfile(S.dir.dir_main,'/Data/dGR/analysis/rs/ind/');

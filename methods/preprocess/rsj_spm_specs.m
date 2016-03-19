@@ -1,9 +1,9 @@
-function rsj_spm_specs(subj,C)
+    function rsj_spm_specs(subj,C)
 %Create model specs
 
 
 
-modelNames = {'standard_ST_mr_byRun_fir'}; %standard_CW_perf standard_ST_mr standard_ST_mr_byRun
+modelNames = {'standard_ST_super_mask'}; %standard_CW_perf standard_ST_mr standard_ST_mr_byRun
 
 
 tt_all =  TT_greco(subj,C);
@@ -14,7 +14,7 @@ tt = tt_all.spm;
 for curModel=1:length(modelNames)
     
     switch modelNames{curModel}
-        case{'standard_ST_mr'}
+        case{'standard_ST_mr','standard_ST_mr_super_mask','standard_ST_super_mask'}
             
             
             for run = 1:length(tt)
@@ -26,30 +26,33 @@ for curModel=1:length(modelNames)
                 onsets = tt(run).ONSET;
                 durations = tt(run).DUR;
                 
-                if ~exist(fullfile(C.dir.dir_analysis,'specs',modelNames{curModel},subj),'dir')
-                    mkdir(fullfile(C.dir.dir_analysis,'specs',modelNames{curModel},subj));
+                if ~exist(fullfile(C.dir.dir_analysis,modelNames{curModel},subj),'dir')
+                    mkdir(fullfile(C.dir.dir_analysis,modelNames{curModel},subj));
                 end
-                save(fullfile(C.dir.dir_analysis,'specs',modelNames{curModel},subj,[subj,'_Run',sprintf('%i',run)]),'names', 'onsets', 'durations')
+                save(fullfile(C.dir.dir_analysis,modelNames{curModel},subj,[subj,'_Run',sprintf('%i',run)]),'names', 'onsets', 'durations')
 
             end
             
-        case{'standard_ST_mr_byRun'}
-  
-            for run = 1:length(tt)
-                for tri = 1:length(tt(run).EVENTNUM)
-                    names{tri} = ['Run',num2str(run),'_Tri',num2str(tri)];
-                end
-                
-                
-                onsets = tt(run).ONSET;
-                durations = tt(run).DUR;
-                
-                if ~exist(fullfile(C.dir.dir_analysis,'specs',modelNames{curModel},subj),'dir')
-                    mkdir(fullfile(C.dir.dir_analysis,'specs',modelNames{curModel},subj));
-                end
-                save(fullfile(C.dir.dir_analysis,'specs',modelNames{curModel},subj,[subj,'_Run',sprintf('%i',run)]),'names', 'onsets', 'durations')
-                
-            end
+               
+      
+            
+%         case{'standard_ST_mr_super_mask'}
+%   
+%             for run = 1:length(tt)
+%                 for tri = 1:length(tt(run).EVENTNUM)
+%                     names{tri} = ['Run',num2str(run),'_Tri',num2str(tri)];
+%                 end
+%                 
+%                 
+%                 onsets = tt(run).ONSET;
+%                 durations = tt(run).DUR;
+%                 
+%                 if ~exist(fullfile(C.dir.dir_analysis,modelNames{curModel},subj),'dir')
+%                     mkdir(fullfile(C.dir.dir_analysis,modelNames{curModel},subj));
+%                 end
+%                 save(fullfile(C.dir.dir_analysis,modelNames{curModel},subj,[subj,'_Run',sprintf('%i',run)]),'names', 'onsets', 'durations')
+%                 
+%             end
             
           case{'standard_ST_mr_byRun_fir'}
   
