@@ -295,9 +295,9 @@ function test_reg_Callback(hObj, ed, h)
 % rsj_rsa_group_cum(h.C,h.CI_comp,h.stat_mode,h.measure_func,h.listboxComp.String(2:end,1));
 rsj_rsa_group_cum_cw(h.C,h.CI_comp,h.listboxComp.String(2:end,1))
 guidata(hObj, h);
-
-
 end
+
+
 %% CompileTT
 function h = CompileTT(h)
 
@@ -465,11 +465,6 @@ end
 guidata(hObj, h);
 h = SetTTnames(h);
 end
-
-
-
-
-
 
 
 

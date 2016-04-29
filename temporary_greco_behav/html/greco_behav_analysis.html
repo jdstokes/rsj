@@ -1,0 +1,677 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>greco_behav_analysis</title><meta name="generator" content="MATLAB 8.5"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2016-04-13"><meta name="DC.source" content="greco_behav_analysis.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h2>Contents</h2><div><ul><li><a href="#3">plot</a></li><li><a href="#5">plot</a></li><li><a href="#7">plot</a></li><li><a href="#9">plot</a></li><li><a href="#11">plot</a></li><li><a href="#12">plot</a></li><li><a href="#13">plot</a></li><li><a href="#14">Behavior analyis log</a></li><li><a href="#17">Behav plot</a></li><li><a href="#20">Filter by perf</a></li></ul></div><pre class="codeinput"><span class="keyword">function</span> analysis_log =greco_behav_analysis(varargin)
+close <span class="string">all</span> <span class="comment">%Go ahead and close all open figures</span>
+
+analysis_log ={};
+analysis_log = Allcomps(analysis_log);
+
+
+<span class="keyword">function</span> analysis_log =Allcomps(analysis_log)
+</pre><pre class="codeinput">subjects = greco_choose_subjects();
+
+
+
+
+filterTypeList = {<span class="string">'dprime'</span>,<span class="string">'dprime1'</span>,<span class="string">'dprime2'</span>,<span class="string">'dprimeHi'</span>,<span class="string">'dprime1Hi'</span>,<span class="string">'dprime2Hi'</span>,<span class="string">'mapFilter'</span>};
+
+<span class="keyword">for</span> filterNum = 1:length(filterTypeList)
+</pre><h2>plot<a name="3"></a></h2><pre class="codeinput">type = filterTypeList{filterNum};
+filter=filterType(type);
+title = [<span class="string">'Same performance (T,M,N) filter:'</span>,type,<span class="string">' n='</span>,int2str(sum(filter))];
+conds ={<span class="string">'corr all s t'</span>,<span class="string">'corr all s m'</span>,<span class="string">'corr all s n'</span>};
+data = cell(1,length(conds));
+units = <span class="string">'% correct'</span>;
+xaxis = {<span class="string">'T'</span>,<span class="string">'M '</span>,<span class="string">'N'</span>};
+<span class="keyword">for</span> i = 1:length(conds)
+    [hand,~ ]= greco_behav_scores(subjects(filter),conds{i});
+    data{1,i}= hand(~isnan(hand));
+    clear <span class="string">hand</span>
+<span class="keyword">end</span>
+analysis_log = Analysis(analysis_log,title,conds,subjects(filter),data,units,xaxis);
+clear <span class="string">title</span> <span class="string">conds</span> <span class="string">columns</span>  <span class="string">data</span> <span class="string">units</span> <span class="string">type</span> <span class="string">i</span> <span class="string">filter</span>
+</pre><img vspace="5" hspace="5" src="greco_behav_analysis_01.png" alt=""> <img vspace="5" hspace="5" src="greco_behav_analysis_02.png" alt=""> <img vspace="5" hspace="5" src="greco_behav_analysis_03.png" alt=""> <img vspace="5" hspace="5" src="greco_behav_analysis_04.png" alt=""> <img vspace="5" hspace="5" src="greco_behav_analysis_05.png" alt=""> <img vspace="5" hspace="5" src="greco_behav_analysis_06.png" alt=""> <img vspace="5" hspace="5" src="greco_behav_analysis_07.png" alt=""> <pre class="codeinput"><span class="keyword">end</span>
+
+<span class="keyword">for</span> filterNum = 1:length(filterTypeList)
+</pre><h2>plot<a name="5"></a></h2><pre class="codeinput">type = filterTypeList{filterNum};
+filter=filterType(type);
+title = [<span class="string">'Diff performance (T,M,N) filter:'</span>,type,<span class="string">' n='</span>,int2str(sum(filter))];
+conds ={<span class="string">'corr all d t'</span>,<span class="string">'corr all d m'</span>,<span class="string">'corr all d n'</span>};
+data = cell(1,length(conds));
+units = <span class="string">'% correct'</span>;
+xaxis = {<span class="string">'T'</span>,<span class="string">'M '</span>,<span class="string">'N'</span>};
+<span class="keyword">for</span> i = 1:length(conds)
+    [hand,~ ]= greco_behav_scores(subjects(filter),conds{i});
+    data{1,i}= hand(~isnan(hand));
+    clear <span class="string">hand</span>
+<span class="keyword">end</span>
+analysis_log = Analysis(analysis_log,title,conds,subjects(filter),data,units,xaxis);
+clear <span class="string">title</span> <span class="string">conds</span> <span class="string">columns</span>  <span class="string">data</span> <span class="string">units</span> <span class="string">type</span> <span class="string">i</span> <span class="string">filter</span>
+</pre><img vspace="5" hspace="5" src="greco_behav_analysis_08.png" alt=""> <img vspace="5" hspace="5" src="greco_behav_analysis_09.png" alt=""> <img vspace="5" hspace="5" src="greco_behav_analysis_10.png" alt=""> <img vspace="5" hspace="5" src="greco_behav_analysis_11.png" alt=""> <img vspace="5" hspace="5" src="greco_behav_analysis_12.png" alt=""> <img vspace="5" hspace="5" src="greco_behav_analysis_13.png" alt=""> <img vspace="5" hspace="5" src="greco_behav_analysis_14.png" alt=""> <pre class="codeinput"><span class="keyword">end</span>
+
+
+<span class="keyword">for</span> filterNum = 1:length(filterTypeList)
+</pre><h2>plot<a name="7"></a></h2><pre class="codeinput">type = filterTypeList{filterNum};
+filter=filterType(type);
+title = [<span class="string">'Diff1 performance (T,M,N) filter:'</span>,type,<span class="string">' n='</span>,int2str(sum(filter))];
+conds ={<span class="string">'corr all d1 t'</span>,<span class="string">'corr all d1 m'</span>,<span class="string">'corr all d1 n'</span>};
+data = cell(1,length(conds));
+units = <span class="string">'% correct'</span>;
+xaxis = {<span class="string">'T'</span>,<span class="string">'M '</span>,<span class="string">'N'</span>};
+<span class="keyword">for</span> i = 1:length(conds)
+    [hand,~ ]= greco_behav_scores(subjects(filter),conds{i});
+    data{1,i}= hand(~isnan(hand));
+    clear <span class="string">hand</span>
+<span class="keyword">end</span>
+analysis_log = Analysis(analysis_log,title,conds,subjects(filter),data,units,xaxis);
+clear <span class="string">title</span> <span class="string">conds</span> <span class="string">columns</span>  <span class="string">data</span> <span class="string">units</span> <span class="string">type</span> <span class="string">i</span> <span class="string">filter</span>
+</pre><img vspace="5" hspace="5" src="greco_behav_analysis_15.png" alt=""> <img vspace="5" hspace="5" src="greco_behav_analysis_16.png" alt=""> <img vspace="5" hspace="5" src="greco_behav_analysis_17.png" alt=""> <img vspace="5" hspace="5" src="greco_behav_analysis_18.png" alt=""> <img vspace="5" hspace="5" src="greco_behav_analysis_19.png" alt=""> <img vspace="5" hspace="5" src="greco_behav_analysis_20.png" alt=""> <img vspace="5" hspace="5" src="greco_behav_analysis_21.png" alt=""> <pre class="codeinput"><span class="keyword">end</span>
+
+
+<span class="keyword">for</span> filterNum = 1:length(filterTypeList)
+</pre><h2>plot<a name="9"></a></h2><pre class="codeinput">type = filterTypeList{filterNum};
+filter=filterType(type);
+title = [<span class="string">'Diff1 performance (T,N) filter:'</span>,type,<span class="string">' n='</span>,int2str(sum(filter))];
+conds ={<span class="string">'corr all d2 t'</span>,<span class="string">'corr all d2 n'</span>};
+data = cell(1,length(conds));
+units = <span class="string">'% correct'</span>;
+xaxis = {<span class="string">'T'</span>,<span class="string">'N'</span>};
+<span class="keyword">for</span> i = 1:length(conds)
+    [hand,~ ]= greco_behav_scores(subjects(filter),conds{i});
+    data{1,i}= hand(~isnan(hand));
+    clear <span class="string">hand</span>
+<span class="keyword">end</span>
+analysis_log = Analysis(analysis_log,title,conds,subjects(filter),data,units,xaxis);
+clear <span class="string">title</span> <span class="string">conds</span> <span class="string">columns</span>  <span class="string">data</span> <span class="string">units</span> <span class="string">type</span> <span class="string">i</span> <span class="string">filter</span>
+</pre><img vspace="5" hspace="5" src="greco_behav_analysis_22.png" alt=""> <img vspace="5" hspace="5" src="greco_behav_analysis_23.png" alt=""> <img vspace="5" hspace="5" src="greco_behav_analysis_24.png" alt=""> <img vspace="5" hspace="5" src="greco_behav_analysis_25.png" alt=""> <img vspace="5" hspace="5" src="greco_behav_analysis_26.png" alt=""> <img vspace="5" hspace="5" src="greco_behav_analysis_27.png" alt=""> <img vspace="5" hspace="5" src="greco_behav_analysis_28.png" alt=""> <pre class="codeinput"><span class="keyword">end</span>
+</pre><h2>plot<a name="11"></a></h2><pre class="codeinput"><span class="keyword">for</span> filterNum = 1:length(filterTypeList)
+
+type = filterTypeList{filterNum};
+filter=filterType(type);
+title = [<span class="string">'Dprime1 (T,M,N) filter:'</span>,type,<span class="string">' n='</span>,int2str(sum(filter))];
+conds = {{<span class="string">'corr all s t'</span>,<span class="string">'incorr all d1 torm'</span>},{<span class="string">'corr all s m'</span>,<span class="string">'incorr all d1 m'</span>},{<span class="string">'corr all s n'</span>,<span class="string">'incorr all d1 norm'</span>}};
+<span class="comment">% subjects = greco_choose_subjects('a');</span>
+data = cell(1,length(conds));
+units = <span class="string">'dprime'</span>;
+xaxis = {<span class="string">'T'</span>,<span class="string">'M'</span>,<span class="string">'N'</span>};
+<span class="keyword">for</span> i = 1:length(conds)
+[~,data{1,i}]=greco_behav_dprime(subjects(filter),conds{i});
+<span class="keyword">end</span>
+analysis_log = Analysis(analysis_log,title,conds,subjects(filter),data,units,xaxis);
+clear <span class="string">title</span> <span class="string">conds</span>  <span class="string">data</span> <span class="string">units</span>
+
+<span class="keyword">end</span>
+</pre><img vspace="5" hspace="5" src="greco_behav_analysis_31.png" alt=""> <h2>plot<a name="12"></a></h2><pre class="codeinput"><span class="keyword">for</span> filterNum = 1:length(filterTypeList)
+
+type = filterTypeList{filterNum};
+filter=filterType(type);
+title = [<span class="string">'Dprime (T,N) filter:'</span>,type,<span class="string">' n='</span>,int2str(sum(filter))];
+conds = {{<span class="string">'corr all s t'</span>,<span class="string">'incorr all d torm'</span>},{<span class="string">'corr all s n'</span>,<span class="string">'incorr all d norm'</span>}};
+<span class="comment">% subjects = greco_choose_subjects('a');</span>
+data = cell(1,length(conds));
+units = <span class="string">'dprime'</span>;
+xaxis = {<span class="string">'T'</span>,<span class="string">'N'</span>};
+<span class="keyword">for</span> i = 1:length(conds)
+[~,data{1,i}]=greco_behav_dprime(subjects(filter),conds{i});
+<span class="keyword">end</span>
+analysis_log = Analysis(analysis_log,title,conds,subjects(filter),data,units,xaxis);
+clear <span class="string">title</span> <span class="string">conds</span>  <span class="string">data</span> <span class="string">units</span>
+
+<span class="keyword">end</span>
+</pre><img vspace="5" hspace="5" src="greco_behav_analysis_34.png" alt=""> <h2>plot<a name="13"></a></h2><pre class="codeinput"><span class="keyword">for</span> filterNum = 1:length(filterTypeList)
+
+type = filterTypeList{filterNum};
+filter=filterType(type);
+title = [<span class="string">'Dprime 2 (T,N) filter:'</span>,type,<span class="string">' n='</span>,int2str(sum(filter))];
+conds = {{<span class="string">'corr all s t'</span>,<span class="string">'incorr all d2 t'</span>},{<span class="string">'corr all s n'</span>,<span class="string">'incorr all d2 n'</span>}};
+<span class="comment">% subjects = greco_choose_subjects('a');</span>
+data = cell(1,length(conds));
+units = <span class="string">'dprime'</span>;
+xaxis = {<span class="string">'T'</span>,<span class="string">'N'</span>};
+<span class="keyword">for</span> i = 1:length(conds)
+[~,data{1,i}]=greco_behav_dprime(subjects(filter),conds{i});
+<span class="keyword">end</span>
+analysis_log = Analysis(analysis_log,title,conds,subjects(filter),data,units,xaxis);
+clear <span class="string">title</span> <span class="string">conds</span>  <span class="string">data</span> <span class="string">units</span>
+
+<span class="keyword">end</span>
+</pre><h2>Behavior analyis log<a name="14"></a></h2><pre class="codeinput"><span class="keyword">function</span> analysis_log = Analysis(varargin)
+</pre><pre class="codeinput"><span class="comment">%Use arguments to specific variables</span>
+args_new = {<span class="string">'analysis_log'</span>,<span class="string">'title'</span>,<span class="string">'conds'</span>,<span class="string">'subjects'</span>,<span class="string">'data'</span>,<span class="string">'units'</span>,<span class="string">'xaxis'</span>};
+args_old = {<span class="string">'analysis_log'</span>,<span class="string">'title'</span>};
+<span class="keyword">if</span> nargin == length(args_new)
+       analysis_log =varargin{1};
+       title = varargin{2};
+       conds = varargin{3};
+       subjects = varargin{4};
+       data = varargin{5};
+       units = varargin{6};
+       xaxis = varargin{7};
+<span class="keyword">elseif</span> nargin ==length(args_old)
+     analysis_log =varargin{1};
+       title = varargin{2};
+      <span class="comment">%Check if Title exists</span>
+        log_cell =squeeze(struct2cell(analysis_log));
+        all_titles = log_cell(strcmp(<span class="string">'title'</span>,fieldnames(analysis_log)),:);
+        annum = find(strcmp(title,all_titles));
+        <span class="keyword">if</span> isempty(annum)
+            error(<span class="string">'Invalid argument(s)'</span>)
+        <span class="keyword">else</span>
+            title = analysis_log(annum).title;
+            conds = analysis_log(annum).conds;
+            subjects = analysis_log(annum).subjects;
+            data = analysis_log(annum).data;
+            units = analysis_log(annum).units;
+            xaxis = analysis_log(annum).xaxis;
+
+        <span class="keyword">end</span>
+<span class="keyword">else</span>
+    error(<span class="string">'Invalid argument(s)'</span>)
+<span class="keyword">end</span>
+
+<span class="comment">%First graph</span>
+<span class="keyword">if</span> isempty(analysis_log)
+    annum = 1;
+    analysis_log(annum).title = title;
+    analysis_log(annum).conds = conds;
+    analysis_log(annum).subjects = subjects;
+    analysis_log(annum).data = data;
+    analysis_log(annum).units = units;
+    analysis_log(annum).xaxis = xaxis;
+
+    sig = Behav_plot(data,title,xaxis,units);
+    analysis_log(annum).h_tag = sig;
+<span class="keyword">else</span>
+    <span class="comment">%Old graph:</span>
+    <span class="keyword">if</span> exist(<span class="string">'annum'</span>,<span class="string">'var'</span>)
+       sig = Behav_plot(data,title,xaxis,units);
+    <span class="keyword">else</span>
+    <span class="comment">%New graph:</span>
+    <span class="comment">%Check if title exists</span>
+    log_cell =squeeze(struct2cell(analysis_log));
+    all_titles = log_cell(strcmp(<span class="string">'title'</span>,fieldnames(analysis_log)),:);
+    annum = find(strcmp(title,all_titles));
+    <span class="comment">%If title does not exist, add entry to analysis_log</span>
+    <span class="keyword">if</span> isempty(annum)
+        annum = length(analysis_log) + 1;
+        analysis_log(annum).title = title;
+        analysis_log(annum).conds = conds;
+        analysis_log(annum).subjects = subjects;
+        analysis_log(annum).data = data;
+        analysis_log(annum).units = units;
+        analysis_log(annum).xaxis = xaxis;
+        sig = Behav_plot(data,title,xaxis,units);
+        analysis_log(annum).h_tag = sig;
+    <span class="keyword">else</span>
+        sig = Behav_plot(data,title,xaxis,units);
+    <span class="keyword">end</span>
+
+
+    <span class="keyword">end</span>
+<span class="keyword">end</span>
+</pre><h2>Behav plot<a name="17"></a></h2><pre class="codeinput"><span class="keyword">function</span> sig = Behav_plot(Data,Title,Cond_names,Units)
+</pre><pre class="codeinput">figure(<span class="string">'Color'</span>,[1 1 1],<span class="string">'Position'</span>,[2450         225         560         420])
+sig = greco_statbarplot(Data,<span class="string">'all'</span>);
+plotmin=mean2(cell2mat(Data))-(std2(cell2mat(Data))*2);
+plotmax=mean2(cell2mat(Data))+(std2(cell2mat(Data))*2);
+ylim([plotmin plotmax]);
+set(gca,<span class="string">'XTickLabel'</span>,Cond_names);
+set(gca,<span class="string">'LineWidth'</span>,2);
+set(gca,<span class="string">'FontSize'</span>,20);
+set(gca,<span class="string">'FontWeight'</span>,<span class="string">'bold'</span>);
+ylabel(Units);
+title(Title);
+<span class="comment">% export_fig(gcf,'file_name',Title);</span>
+</pre><img vspace="5" hspace="5" src="greco_behav_analysis_29.png" alt=""> <img vspace="5" hspace="5" src="greco_behav_analysis_30.png" alt=""> <img vspace="5" hspace="5" src="greco_behav_analysis_32.png" alt=""> <img vspace="5" hspace="5" src="greco_behav_analysis_33.png" alt=""> <img vspace="5" hspace="5" src="greco_behav_analysis_35.png" alt=""> <img vspace="5" hspace="5" src="greco_behav_analysis_36.png" alt=""> <pre class="codeoutput">
+ans = 
+
+1x49 struct array with fields:
+
+    title
+    conds
+    subjects
+    data
+    units
+    xaxis
+    h_tag
+
+</pre><h2>Filter by perf<a name="20"></a></h2><pre class="codeinput"><span class="keyword">function</span> filter = Filter_subjects(data, thresh_lo, thesh_hi)
+filter = data  &gt; thresh_lo &amp; data &lt; thesh_hi;
+
+
+<span class="keyword">function</span> filter = Filter_subjects_byMap
+           subjects = greco_choose_subjects();
+           <span class="keyword">for</span> i = 1: length(subjects)
+            scores=greco_map_subj(subjects{i});
+            filter(i,1) = scores.D1_T &lt; scores.D1_N;
+           <span class="keyword">end</span>
+
+
+
+<span class="keyword">function</span> filter=filterType(type)
+
+<span class="keyword">switch</span> type
+    <span class="keyword">case</span> <span class="string">'none'</span>
+
+    <span class="keyword">case</span> <span class="string">'dprime'</span>
+        conds = {<span class="string">'corr all s'</span>,<span class="string">'incorr all d'</span>};
+        subjects = greco_choose_subjects();
+        [~,data]=greco_behav_dprime(subjects,conds);
+        filter = Filter_subjects(data,0,3);
+
+    <span class="keyword">case</span> <span class="string">'dprimeHi'</span>
+        conds = {<span class="string">'corr all s'</span>,<span class="string">'incorr all d'</span>};
+        subjects = greco_choose_subjects();
+        [~,data]=greco_behav_dprime(subjects,conds);
+        filter = data &gt;= mean(data);
+
+
+    <span class="keyword">case</span> <span class="string">'dprime1'</span>
+        conds = {<span class="string">'corr all s'</span>,<span class="string">'incorr all d1'</span>};
+        subjects = greco_choose_subjects();
+        [~,data]=greco_behav_dprime(subjects,conds);
+        filter = Filter_subjects(data,0,3);
+    <span class="keyword">case</span> <span class="string">'dprime1Hi'</span>
+        conds = {<span class="string">'corr all s'</span>,<span class="string">'incorr all d1'</span>};
+        subjects = greco_choose_subjects();
+        [~,data]=greco_behav_dprime(subjects,conds);
+        filter = data &gt;= mean(data);
+    <span class="keyword">case</span> <span class="string">'dprime2'</span>
+        conds = {<span class="string">'corr all s'</span>,<span class="string">'incorr all d2'</span>};
+        subjects = greco_choose_subjects();
+        [~,data]=greco_behav_dprime(subjects,conds);
+        filter = Filter_subjects(data,0,3);
+
+    <span class="keyword">case</span> <span class="string">'dprime2Hi'</span>
+        conds = {<span class="string">'corr all s'</span>,<span class="string">'incorr all d2'</span>};
+        subjects = greco_choose_subjects();
+        [~,data]=greco_behav_dprime(subjects,conds);
+        filter = data &gt;= mean(data);
+    <span class="keyword">case</span> <span class="string">'mapFilter'</span>
+        filter = Filter_subjects_byMap;
+<span class="keyword">end</span>
+</pre><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2015a</a><br></p></div><!--
+##### SOURCE BEGIN #####
+function analysis_log =greco_behav_analysis(varargin)
+close all %Go ahead and close all open figures
+
+analysis_log ={};
+analysis_log = Allcomps(analysis_log);
+
+
+function analysis_log =Allcomps(analysis_log)
+
+
+
+subjects = greco_choose_subjects();
+
+
+
+
+filterTypeList = {'dprime','dprime1','dprime2','dprimeHi','dprime1Hi','dprime2Hi','mapFilter'};
+
+for filterNum = 1:length(filterTypeList)
+%% plot
+type = filterTypeList{filterNum};
+filter=filterType(type);
+title = ['Same performance (T,M,N) filter:',type,' n=',int2str(sum(filter))];
+conds ={'corr all s t','corr all s m','corr all s n'};
+data = cell(1,length(conds));
+units = '% correct';
+xaxis = {'T','M ','N'};
+for i = 1:length(conds)
+    [hand,~ ]= greco_behav_scores(subjects(filter),conds{i});
+    data{1,i}= hand(~isnan(hand));
+    clear hand
+end
+analysis_log = Analysis(analysis_log,title,conds,subjects(filter),data,units,xaxis);
+clear title conds columns  data units type i filter
+
+end
+
+for filterNum = 1:length(filterTypeList)
+%% plot
+type = filterTypeList{filterNum};
+filter=filterType(type);
+title = ['Diff performance (T,M,N) filter:',type,' n=',int2str(sum(filter))];
+conds ={'corr all d t','corr all d m','corr all d n'};
+data = cell(1,length(conds));
+units = '% correct';
+xaxis = {'T','M ','N'};
+for i = 1:length(conds)
+    [hand,~ ]= greco_behav_scores(subjects(filter),conds{i});
+    data{1,i}= hand(~isnan(hand));
+    clear hand
+end
+analysis_log = Analysis(analysis_log,title,conds,subjects(filter),data,units,xaxis);
+clear title conds columns  data units type i filter
+
+end
+
+
+for filterNum = 1:length(filterTypeList)
+%% plot
+type = filterTypeList{filterNum};
+filter=filterType(type);
+title = ['Diff1 performance (T,M,N) filter:',type,' n=',int2str(sum(filter))];
+conds ={'corr all d1 t','corr all d1 m','corr all d1 n'};
+data = cell(1,length(conds));
+units = '% correct';
+xaxis = {'T','M ','N'};
+for i = 1:length(conds)
+    [hand,~ ]= greco_behav_scores(subjects(filter),conds{i});
+    data{1,i}= hand(~isnan(hand));
+    clear hand
+end
+analysis_log = Analysis(analysis_log,title,conds,subjects(filter),data,units,xaxis);
+clear title conds columns  data units type i filter
+
+end
+
+
+for filterNum = 1:length(filterTypeList)
+%% plot
+type = filterTypeList{filterNum};
+filter=filterType(type);
+title = ['Diff1 performance (T,N) filter:',type,' n=',int2str(sum(filter))];
+conds ={'corr all d2 t','corr all d2 n'};
+data = cell(1,length(conds));
+units = '% correct';
+xaxis = {'T','N'};
+for i = 1:length(conds)
+    [hand,~ ]= greco_behav_scores(subjects(filter),conds{i});
+    data{1,i}= hand(~isnan(hand));
+    clear hand
+end
+analysis_log = Analysis(analysis_log,title,conds,subjects(filter),data,units,xaxis);
+clear title conds columns  data units type i filter
+
+end
+
+%% plot
+for filterNum = 1:length(filterTypeList)
+
+type = filterTypeList{filterNum};
+filter=filterType(type);
+title = ['Dprime1 (T,M,N) filter:',type,' n=',int2str(sum(filter))];
+conds = {{'corr all s t','incorr all d1 torm'},{'corr all s m','incorr all d1 m'},{'corr all s n','incorr all d1 norm'}};
+% subjects = greco_choose_subjects('a');
+data = cell(1,length(conds));
+units = 'dprime';
+xaxis = {'T','M','N'};
+for i = 1:length(conds)
+[~,data{1,i}]=greco_behav_dprime(subjects(filter),conds{i});
+end
+analysis_log = Analysis(analysis_log,title,conds,subjects(filter),data,units,xaxis);
+clear title conds  data units
+
+end
+
+
+%% plot
+for filterNum = 1:length(filterTypeList)
+
+type = filterTypeList{filterNum};
+filter=filterType(type);
+title = ['Dprime (T,N) filter:',type,' n=',int2str(sum(filter))];
+conds = {{'corr all s t','incorr all d torm'},{'corr all s n','incorr all d norm'}};
+% subjects = greco_choose_subjects('a');
+data = cell(1,length(conds));
+units = 'dprime';
+xaxis = {'T','N'};
+for i = 1:length(conds)
+[~,data{1,i}]=greco_behav_dprime(subjects(filter),conds{i});
+end
+analysis_log = Analysis(analysis_log,title,conds,subjects(filter),data,units,xaxis);
+clear title conds  data units
+
+end
+
+%% plot
+for filterNum = 1:length(filterTypeList)
+
+type = filterTypeList{filterNum};
+filter=filterType(type);
+title = ['Dprime 2 (T,N) filter:',type,' n=',int2str(sum(filter))];
+conds = {{'corr all s t','incorr all d2 t'},{'corr all s n','incorr all d2 n'}};
+% subjects = greco_choose_subjects('a');
+data = cell(1,length(conds));
+units = 'dprime';
+xaxis = {'T','N'};
+for i = 1:length(conds)
+[~,data{1,i}]=greco_behav_dprime(subjects(filter),conds{i});
+end
+analysis_log = Analysis(analysis_log,title,conds,subjects(filter),data,units,xaxis);
+clear title conds  data units
+
+end
+
+
+
+
+%% Behavior analyis log
+function analysis_log = Analysis(varargin)
+%Use arguments to specific variables
+args_new = {'analysis_log','title','conds','subjects','data','units','xaxis'};
+args_old = {'analysis_log','title'};
+if nargin == length(args_new)
+       analysis_log =varargin{1};
+       title = varargin{2};
+       conds = varargin{3};
+       subjects = varargin{4};
+       data = varargin{5};
+       units = varargin{6};
+       xaxis = varargin{7};
+elseif nargin ==length(args_old)
+     analysis_log =varargin{1};
+       title = varargin{2};
+      %Check if Title exists
+        log_cell =squeeze(struct2cell(analysis_log));
+        all_titles = log_cell(strcmp('title',fieldnames(analysis_log)),:);
+        annum = find(strcmp(title,all_titles));
+        if isempty(annum)
+            error('Invalid argument(s)')
+        else
+            title = analysis_log(annum).title;
+            conds = analysis_log(annum).conds;
+            subjects = analysis_log(annum).subjects;
+            data = analysis_log(annum).data;
+            units = analysis_log(annum).units;
+            xaxis = analysis_log(annum).xaxis;
+            
+        end
+else
+    error('Invalid argument(s)')
+end
+
+%First graph
+if isempty(analysis_log)
+    annum = 1;
+    analysis_log(annum).title = title;
+    analysis_log(annum).conds = conds;
+    analysis_log(annum).subjects = subjects;
+    analysis_log(annum).data = data;
+    analysis_log(annum).units = units;
+    analysis_log(annum).xaxis = xaxis;
+
+    sig = Behav_plot(data,title,xaxis,units);
+    analysis_log(annum).h_tag = sig;
+else
+    %Old graph:
+    if exist('annum','var')
+       sig = Behav_plot(data,title,xaxis,units);
+    else
+    %New graph:
+    %Check if title exists
+    log_cell =squeeze(struct2cell(analysis_log));
+    all_titles = log_cell(strcmp('title',fieldnames(analysis_log)),:);
+    annum = find(strcmp(title,all_titles));
+    %If title does not exist, add entry to analysis_log
+    if isempty(annum)
+        annum = length(analysis_log) + 1;
+        analysis_log(annum).title = title;
+        analysis_log(annum).conds = conds;
+        analysis_log(annum).subjects = subjects;
+        analysis_log(annum).data = data;
+        analysis_log(annum).units = units;
+        analysis_log(annum).xaxis = xaxis;
+        sig = Behav_plot(data,title,xaxis,units);
+        analysis_log(annum).h_tag = sig;
+    else
+        sig = Behav_plot(data,title,xaxis,units);
+    end
+        
+
+    end
+end
+
+%% Behav plot
+function sig = Behav_plot(Data,Title,Cond_names,Units)
+figure('Color',[1 1 1],'Position',[2450         225         560         420])
+sig = greco_statbarplot(Data,'all');
+plotmin=mean2(cell2mat(Data))-(std2(cell2mat(Data))*2);
+plotmax=mean2(cell2mat(Data))+(std2(cell2mat(Data))*2);
+ylim([plotmin plotmax]);
+set(gca,'XTickLabel',Cond_names);
+set(gca,'LineWidth',2);
+set(gca,'FontSize',20);
+set(gca,'FontWeight','bold');
+ylabel(Units);
+title(Title);
+% export_fig(gcf,'file_name',Title);
+
+%% Filter by perf
+function filter = Filter_subjects(data, thresh_lo, thesh_hi)
+filter = data  > thresh_lo & data < thesh_hi;
+
+
+function filter = Filter_subjects_byMap
+           subjects = greco_choose_subjects();
+           for i = 1: length(subjects)
+            scores=greco_map_subj(subjects{i});
+            filter(i,1) = scores.D1_T < scores.D1_N;
+           end
+
+
+
+function filter=filterType(type)
+
+switch type
+    case 'none'
+        
+    case 'dprime'
+        conds = {'corr all s','incorr all d'};
+        subjects = greco_choose_subjects();
+        [~,data]=greco_behav_dprime(subjects,conds);
+        filter = Filter_subjects(data,0,3);
+     
+    case 'dprimeHi'
+        conds = {'corr all s','incorr all d'};
+        subjects = greco_choose_subjects();
+        [~,data]=greco_behav_dprime(subjects,conds);
+        filter = data >= mean(data);
+        
+        
+    case 'dprime1'
+        conds = {'corr all s','incorr all d1'};
+        subjects = greco_choose_subjects();
+        [~,data]=greco_behav_dprime(subjects,conds);
+        filter = Filter_subjects(data,0,3);
+    case 'dprime1Hi'
+        conds = {'corr all s','incorr all d1'};
+        subjects = greco_choose_subjects();
+        [~,data]=greco_behav_dprime(subjects,conds);
+        filter = data >= mean(data);        
+    case 'dprime2'
+        conds = {'corr all s','incorr all d2'};
+        subjects = greco_choose_subjects();
+        [~,data]=greco_behav_dprime(subjects,conds);
+        filter = Filter_subjects(data,0,3);
+        
+    case 'dprime2Hi'
+        conds = {'corr all s','incorr all d2'};
+        subjects = greco_choose_subjects();
+        [~,data]=greco_behav_dprime(subjects,conds);
+        filter = data >= mean(data);
+    case 'mapFilter'
+        filter = Filter_subjects_byMap;
+end
+
+
+
+
+
+
+
+
+
+
+
+##### SOURCE END #####
+--></body></html>

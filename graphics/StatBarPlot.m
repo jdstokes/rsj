@@ -95,9 +95,9 @@ comps = nchoosek(1:numbars,2);
  for i = 1: size(comps,1)
                     try
                         if ~singlesub
-                            disp(i)
+%                             disp(i)
                             
-                        [h,p,~,~] = ttest(data{comps(i,1)},data{comps(i,2)})
+                        [h,p,~,~] = ttest(data{comps(i,1)},data{comps(i,2)});
                         elseif singlesub
                             
                            [h,p,~,~]= ttest2(data{comps(i,1)},data{comps(i,2)});
@@ -134,22 +134,22 @@ function sig = Compare_within(data,bar_centers,singlesub,legend_label)
             for j2 = j1+1 : numElements
                 
                        if ~singlesub
-                          disp(i)
-                        [h,p,c,t] = ttest(data{i,j1},data{i,j2})
+%                           disp(i)
+                        [h,p,c,t] = ttest(data{i,j1},data{i,j2});
 
                         elseif singlesub
                                 [h,p,c,t] = ttest2(data{i,j1},data{i,j2});
                         end
                     if h==1
                         sig = 1;
-                        plot([bar_centers(i,j1),bar_centers(i,j2)],[height0,height0],'k','linewidth',1.5)
-                        plot([bar_centers(i,j1),bar_centers(i,j1)],[height0,height0-.3*dh],'k','linewidth',1.5)
-                        plot([bar_centers(i,j2),bar_centers(i,j2)],[height0,height0-.3*dh],'k','linewidth',1.5)
+                        plot([bar_centers(i,j1),bar_centers(i,j2)],[height0,height0],'k','linewidth',1.5);
+                        plot([bar_centers(i,j1),bar_centers(i,j1)],[height0,height0-.3*dh],'k','linewidth',1.5);
+                        plot([bar_centers(i,j2),bar_centers(i,j2)],[height0,height0-.3*dh],'k','linewidth',1.5);
                         if p<=.01
-                            plot(mean([bar_centers(i,j1),bar_centers(i,j2)])-.1,height0+.3*dh,'b*','linewidth',1.5)
-                            plot(mean([bar_centers(i,j1),bar_centers(i,j2)])+.1,height0+.3*dh,'b*','linewidth',1.5)
+                            plot(mean([bar_centers(i,j1),bar_centers(i,j2)])-.1,height0+.3*dh,'b*','linewidth',1.5);
+                            plot(mean([bar_centers(i,j1),bar_centers(i,j2)])+.1,height0+.3*dh,'b*','linewidth',1.5);
                         else
-                            plot(mean([bar_centers(i,j1),bar_centers(i,j2)]),height0+.3*dh,'b*','linewidth',1.5)
+                            plot(mean([bar_centers(i,j1),bar_centers(i,j2)]),height0+.3*dh,'b*','linewidth',1.5);
                         end
                         height0 = height0+dh;
                     end

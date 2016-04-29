@@ -5,7 +5,7 @@ classdef Study_greco < rsj_study
 
             S.name = 'greco';
             % Directories
-            S.dir.dir_main = '/Users/jdstokes/Studies';
+            S.dir.dir_main = '/Users/jdstokes/mount/Studies';
 %             S.dir.dir_config =      fullfile(S.dir.dir_main,'Studies/Repos/projects/sGR/mlb/');
             S.dir.dir_model =       fullfile(S.dir.dir_main,'/Data/dGR/analysis/rs/ind/');
             S.dir.dir_rs =          fullfile(S.dir.dir_main,'/Data/dGR/analysis/rs/ind/');
@@ -71,10 +71,10 @@ classdef Study_greco < rsj_study
                 'S22_B'
                 'S23_B' % 99 trials
                 'S24_A'
-%                 'S25_A'
-%                  'S26_B'
-%                  'S27_A'
-                };
+%                  'S25_A'
+%                   'S26_B'
+%                   'S27_A'
+               };
             
             
             S.subjects.subj2inc =  ones(1,length(S.subjects.subjAll))==1;
