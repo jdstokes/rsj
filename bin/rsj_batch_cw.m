@@ -1,4 +1,4 @@
-function rsj_batch(varargin)
+function rsj_batch_cw(varargin)
 % Batch script for the following modules:
 % 'rsj_spm_smooth' 'rsj_spm_model' 'SPM_supermask' 'Maskbetas'
 % 'Calcrs'
@@ -16,7 +16,7 @@ else
     error('bad input')
 end
     
-modules = {'Voxel_selection_tt_city_only','Voxel_selection_tt_city_removed'};
+modules = {'rsj_spm_model_noMR_super_mask'};
 
 subjects= {
         'S1_A'
@@ -39,7 +39,7 @@ subjects= {
         'S22_B'
         'S23_B'
         'S24_A'
-
+        'S25_A'
 
                 };
             
@@ -92,11 +92,11 @@ function RS_pipeline(subj,C,modules)
 for i = 1:length(modules)
     disp(modules{i});
     mod_func = str2func(modules{i});
-%     try
+    try
     mod_func(subj,C)
-%     catch me
-%         disp(me);
-%     end
+    catch me
+        disp(me);
+    end
 end
 end
 
