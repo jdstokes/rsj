@@ -2,7 +2,7 @@ function tt_all = TT_greco(subj,C)
 
 
 format = '.txt';
-fileName = fullfile(C.dir.dir_behavioral,subj,[subj,format]); 
+fileName = fullfile(C.dir.dir_behavioral,subj,[subj,format]);
 tt = tdfread(fileName);
 clear C fileName 
 

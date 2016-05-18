@@ -7,7 +7,7 @@ function rsj_batch(varargin)
 % 'rsj_spm_model_super_mask' 'rsj_spm_model_noMR_super_mask'
 if nargin == 0
 elseif nargin == 1 && iscellstr(varargin)
-    if any(strcmp(varargin{1},{'model','smooth','rsa','special'}))
+    if any(strcmp(varargin{1},{'model','smooth','rsa','special','other'}))
         options = getOptions(varargin{1});
     else
         error('bad input');
@@ -16,7 +16,7 @@ else
     error('bad input')
 end
     
-modules = {'Voxel_selection_tt_city_only','Voxel_selection_tt_city_removed'};
+modules = {'Calcrs'};
 
 subjects= {
         'S1_A'
@@ -131,8 +131,14 @@ end
          options.maskType = {'v3'};
      case 'masks'
         options.maskType = {'v3'};
+     case 'other'
+%          options.rs_feature_mask={'Voxel_selection_anova1_effect','Voxel_selection_anova1_noeffect'};
+    
+         options.spm_mask = {'m8','m3','m1','m0'};
+         options.spm_smooth = {'s3ra','s2ra','s1ra','ra',};
+         options.rs_feature_mask={'none','Voxel_selection_anova1_effect','Voxel_selection_anova1_noeffect'};
 
-  
+
  end
  
  end

@@ -5,7 +5,7 @@ classdef Study_greco < rsj_study
 
             S.name = 'greco';
             % Directories
-            S.dir.dir_main = '/Users/jdstokes/mount/Studies';
+            S.dir.dir_main = '/Volumes/jdstokes/Studies';
 %             S.dir.dir_config =      fullfile(S.dir.dir_main,'Studies/Repos/projects/sGR/mlb/');
             S.dir.dir_model =       fullfile(S.dir.dir_main,'/Data/dGR/analysis/rs/ind/');
             S.dir.dir_rs =          fullfile(S.dir.dir_main,'/Data/dGR/analysis/rs/ind/');
@@ -26,7 +26,7 @@ classdef Study_greco < rsj_study
             S.spm.spm_motionFile = 'rp_a0001epihippoperprunX4.txt';
             S.spm.spm_coregFile = 'func_run1/ra0001epihippoperprunX4.nii,1';
             S.spm.spm_modelName ='standard_ST_mr';%
-            S.spm.spm_hpf = 50;%128
+            S.spm.spm_hpf = 128;%128
             S.spm.spm_smooth ='s2ra';
             S.spm.spm_mask = 'm3';
             

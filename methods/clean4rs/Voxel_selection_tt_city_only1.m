@@ -1,4 +1,4 @@
-function Voxel_selection_tt_city_only(subj,C)
+function Voxel_selection_tt_city_only1(subj,C)
 % Drop/mean voxels showing specified univariate activation patterns
 
 
@@ -23,8 +23,8 @@ for i =1:length(vars)
 data_table.(vars{i})= tt_all.rs_pair.(vars{i});
 end
 
-data_table.run_num = categorical(data_table.run_num);
-data_table.tt_code = categorical(data_table.tt_code);
+% data_table.run_num = categorical(data_table.run_num);
+% data_table.tt_code = categorical(data_table.tt_code);
 data_table.cityTargC = categorical(data_table.cityTargC);
 
 % input
@@ -49,22 +49,17 @@ for i1 =1:numMasks
     data_table_new = data_table;
     data_table_new.beta =betas_new{i1}(:,i2); 
     %Remove first trial of each run
-    data_table_new(data_table_new.tt_code == '99',:) = [];
-    data_table_new.tt_code= removecats(data_table_new.tt_code);
+    data_table_new(data_table_new.tt_code == 99,:) = [];
+%     data_table_new.tt_code= removecats(data_table_new.tt_code);
     
-    lm_city = fitlm(data_table_new,'beta ~ 1 + cityTargC');
-    lm_tt =   fitlm(data_table_new,'beta ~ 1 + tt_code');
-%     lm_city_tt =   fitlm(data_table_new,'beta ~ 1 + cityTargC + tt_code');
     
-    anova_city = anova(lm_city);
-    anova_tt = anova(lm_tt);
-    
-
+[pvals,~,~] = anovan(data_table_new.beta, {data_table_new.run_num data_table_new.tt_code data_table_new.cityTargC}, ...
+'model','interaction','varnames',{'Run' 'TT' 'City'},'display','off');
     
     
         
         
-        if anova_city.pValue(1) > .1  && anova_tt.pValue(1) > .1
+        if any(pvals < .10)
             betas_new{i1}(:,i2) = NaN;
             cnt(i1)= cnt(i1) +1;
         end

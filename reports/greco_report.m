@@ -1,4 +1,4 @@
-function greco_report(subject_type, measure)
+function greco_report(C,subject_type, measure)
 % Output rsj report
 
 %% Report index
@@ -8,11 +8,7 @@ function greco_report(subject_type, measure)
 % Mean Beta
 %   S D 
 %   S D1 D2
-
-%% Configure
-C = Study_greco;
-% measure = 'MPS(pw)';
-% subject_type = 'T > N subjs';
+close all
 
 %stat mode
 stat_mode = 'within';
@@ -49,15 +45,23 @@ switch measure
     case  'MPS(pw)'
         C.tt.score_type = 'rsz';
         C.tt.mode = 'rs_pair';
+        C.rs.rs_calcCurr = 1;
+        
     case  'MPS(all)'
-         C.tt.score_type = 'rsz';
-         C.tt.mode ='rs_all';
+        C.tt.score_type = 'rsz';
+        C.tt.mode ='rs_all';
+        C.rs.rs_calcCurr = 2;
+        
     case  'mean Beta'
-         C.tt.score_type = 'uni_m';
-         C.tt.mode = 'uni';
+        C.tt.score_type = 'uni_m';
+        C.tt.mode = 'uni';
+        C.rs.rs_calcCurr = 3;
+        
     case  'MPS(pw runNorm)'
         C.tt.score_type = 'rsz_runNorm';
         C.tt.mode = 'rs_pair_runNorm';
+        C.rs.rs_calcCurr = 1;
+        
 end
 
             

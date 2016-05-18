@@ -203,18 +203,26 @@ switch measure
     case  'MPS(pw)'
         h.C.tt.score_type = 'rsz';
         h.C.tt.mode = 'rs_pair';
+        h.C.rs.rs_calcCurr = 1;
+        
     case  'MPS(all)'
-         h.C.tt.score_type = 'rsz';
-         h.C.tt.mode ='rs_all';
+        h.C.tt.score_type = 'rsz';
+        h.C.tt.mode ='rs_all';
+        h.C.rs.rs_calcCurr = 2;
+        
     case  'mean Beta'
-         h.C.tt.score_type = 'uni_m';
-         h.C.tt.mode = 'uni';
+        h.C.tt.score_type = 'uni_m';
+        h.C.tt.mode = 'uni';
+        h.C.rs.rs_calcCurr = 3;
+        
     case  'MPS(pw runNorm)'
         h.C.tt.score_type = 'rsz_runNorm';
         h.C.tt.mode = 'rs_pair_runNorm';
-
+        h.C.rs.rs_calcCurr = 1;
+        
+        
 end
-SetTTnames(h)
+SetTTnames(h);
 
     
 guidata(hObj, h);

@@ -1,7 +1,7 @@
 function [score_all,tt_size_all] = greco_behav_scores(subjects,score_name)
 
 %Location of Greco enc behavdata
-foldpath = '/Users/jdstokes/mount/Studies/Data/dGR/behav/behav_scan/';
+foldpath = '/Volumes/Jared/Data/dGR/behav/behav_scan/';
 
 for curSubj = 1:length(subjects)
     
