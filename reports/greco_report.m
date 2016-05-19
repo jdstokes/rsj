@@ -10,6 +10,9 @@ function greco_report(C,subject_type, measure)
 %   S D1 D2
 close all
 
+%behav path
+foldpath = C.dir.dir_behavioral;
+
 %stat mode
 stat_mode = 'within';
 %measure type
@@ -24,18 +27,18 @@ switch subject_type
         C.subjects.subjAll = subjects;
      
     case 'T > N subjs'
-           C.subjects.subjAll = subject_filter(subjects,'t > n');
+           C.subjects.subjAll = subject_filter(foldpath,subjects,'t > n');
         
         
     case 'N > T subjs'
-        C.subjects.subjAll = subject_filter(subjects,'n > t');
+        C.subjects.subjAll = subject_filter(foldpath,subjects,'n > t');
 
         
     case 'high perf subjs'
-                C.subjects.subjAll = subject_filter(subjects,'high perf');
+                C.subjects.subjAll = subject_filter(foldpath,subjects,'high perf');
 
     case 'low perf subjs'
-                C.subjects.subjAll = subject_filter(subjects,'low perf');
+                C.subjects.subjAll = subject_filter(foldpath,subjects,'low perf');
 
 end
 C.subjects.subj2inc =  ones(1,length(C.subjects.subjAll))==1;

@@ -13,6 +13,7 @@ classdef Study_greco < rsj_study
             S.dir.dir_behavioral =  fullfile(S.dir.dir_main,'/Data/dGR/behav/behav_scan/');
             S.dir.dir_mask =        fullfile(S.dir.dir_main,'/Data/dGR/rois/');
             S.dir.dir_mri=          fullfile(S.dir.dir_main,'/Data/dGR/mri');
+            S.dir.dir_reports=      fullfile(S.dir.dir_main,'/Data/dGR/reports');
             
             % SPM
             S.spm.spm_funcFold = 'func_run';

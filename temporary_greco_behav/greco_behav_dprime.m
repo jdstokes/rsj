@@ -1,9 +1,9 @@
-function [group, ind] = greco_behav_dprime(subjects, scores) 
+function [group, ind] = greco_behav_dprime(foldpath,subjects, scores) 
 
 
 prc = nan(length(subjects),2);
-[score1,tt_size_1] = greco_behav_scores(subjects,scores{1});
-[score2,tt_size_2] = greco_behav_scores(subjects,scores{2});
+[score1,tt_size_1] = greco_behav_scores(foldpath,subjects,scores{1});
+[score2,tt_size_2] = greco_behav_scores(foldpath,subjects,scores{2});
 
 prc(1:length(subjects),1) = score1;
 prc(1:length(subjects),2) = score2;
