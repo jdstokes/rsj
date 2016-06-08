@@ -5,6 +5,7 @@ function rsj_batch(varargin)
 % 'rsj_spm_segment_mprage'   ,'rsj_spm_specs' , 'rsj_spm_model_byRun'
 % 'rsj_spm_model_byRunNoMR' 'rsj_spm_model_byRunNoMR_FIR'
 % 'rsj_spm_model_super_mask' 'rsj_spm_model_noMR_super_mask'
+% 'ASHS2nii'
 if nargin == 0
 elseif nargin == 1 && iscellstr(varargin)
     if any(strcmp(varargin{1},{'model','smooth','rsa','special','other'}))
@@ -16,7 +17,7 @@ else
     error('bad input')
 end
     
-modules = {'Calcrs'};
+modules = {'rsj_spm_fixmasks2'};
 
 subjects= {
         'S1_A'
