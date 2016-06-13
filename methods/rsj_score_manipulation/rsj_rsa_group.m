@@ -48,7 +48,11 @@ for i=subjInd   %Cycle through subject indices
             mC =0;
             for j = maskInd
                 mC= mC+1;
+                try
                 data{mC,cond}(sC,1)= scores(j);
+                catch ME
+                    data{mC,cond}(sC,1)= NaN; 
+                end
             end
             clear scores
             

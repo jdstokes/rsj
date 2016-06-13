@@ -135,10 +135,14 @@ function sig = Compare_within(data,bar_centers,singlesub,legend_label)
                 
                        if ~singlesub
 %                           disp(i)
+                        try
                         [h,p,c,t] = ttest(data{i,j1},data{i,j2});
+                        end
 
                         elseif singlesub
+                            try
                                 [h,p,c,t] = ttest2(data{i,j1},data{i,j2});
+                            end
                         end
                     if h==1
                         sig = 1;

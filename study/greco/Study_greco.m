@@ -27,7 +27,7 @@ classdef Study_greco < rsj_study
             S.spm.spm_motionFile = 'rp_a0001epihippoperprunX4.txt';
             S.spm.spm_coregFile = 'func_run1/ra0001epihippoperprunX4.nii,1';
             S.spm.spm_modelName ='standard_ST_mr';%
-            S.spm.spm_hpf = 128;%128
+            S.spm.spm_hpf = 50;%128
             S.spm.spm_smooth ='s2ra';
             S.spm.spm_mask = 'm3';
             
@@ -81,7 +81,7 @@ classdef Study_greco < rsj_study
             S.subjects.subj2inc =  ones(1,length(S.subjects.subjAll))==1;
             
             
-            S.masks.maskType = 'ash_lfseg_heur';% 'ash_lfseg_heur'
+            S.masks.maskType = 'ash_lfseg_heur';% 'ash_lfseg_heur' 'ash_lfseg_corr_usegray' 'ash_lfseg_corr_nogray'
             
 %             S.masks.maskAll ={
 %                 'L_CA1.nii'
@@ -95,7 +95,32 @@ classdef Study_greco < rsj_study
 %                 'R_SUB.nii'
 %                 'R_PHC.nii'
 %   };
-S.masks.maskAll ={'ash_left_35.nii';'ash_left_36.nii';'ash_left_CA1.nii';'ash_left_CA2.nii';'ash_left_CA3.nii';'ash_left_CS.nii';'ash_left_DG.nii';'ash_left_ERC.nii';'ash_left_MISC.nii';'ash_left_head.nii';'ash_left_subiculum.nii';'ash_left_tail.nii';'ash_right_35.nii';'ash_right_36.nii';'ash_right_CA1.nii';'ash_right_CA2.nii';'ash_right_CA3.nii';'ash_right_CS.nii';'ash_right_DG.nii';'ash_right_ERC.nii';'ash_right_MISC.nii';'ash_right_head.nii';'ash_right_subiculum.nii';'ash_right_tail.nii'};
+S.masks.maskAll ={
+    'ash_left_35.nii'
+    'ash_left_36.nii'
+    'ash_left_CA1.nii'
+    'ash_left_CA2.nii'
+    'ash_left_CA3.nii'
+    'ash_left_CS.nii'
+    'ash_left_DG.nii'
+    'ash_left_ERC.nii'
+    'ash_left_MISC.nii'
+    'ash_left_head.nii'
+    'ash_left_subiculum.nii'
+    'ash_left_tail.nii'
+    'ash_right_35.nii'
+    'ash_right_36.nii'
+    'ash_right_CA1.nii'
+    'ash_right_CA2.nii'
+    'ash_right_CA3.nii'
+    'ash_right_CS.nii'
+    'ash_right_DG.nii'
+    'ash_right_ERC.nii'
+    'ash_right_MISC.nii'
+    'ash_right_head.nii'
+    'ash_right_subiculum.nii'
+    'ash_right_tail.nii'
+    };
               
             
             S.masks.mask2inc = ones(1,length(S.masks.maskAll))==1;

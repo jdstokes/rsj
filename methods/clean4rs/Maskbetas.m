@@ -62,8 +62,10 @@ end
     
 function mask = LoadMask(dir,mask_name)
     try
-        img=fmris_read_nifti(fullfile(dir,mask_name));
-        mask=img.data;
+%         img=fmris_read_nifti(fullfile(dir,mask_name));
+%         mask=img.data;
+         mask=spm_read_vols(spm_vol(fullfile(dir,mask_name)));
+
         clear img
     catch ME
         error(['Could not load mask ',mask_name]);
