@@ -97,11 +97,14 @@ end
 
 
 %build x axis labels
-labels = strrep(strrep(GetMasks(C),'.nii',''),'_','');
+% labels = strrep(strrep(GetMasks(C),'.nii',''),'_','');
+
+labels = FixStrings(GetMasks(C),{'.nii','ash_','_'},{'','',' '});
 units = C.rs.rs_calcUnits(C.rs.rs_calcCurr);
 %plot bars with stats
 StatBarPlot(data,stat_mode,labels,units,singlesub,legend_label);
 
 disp('Done!');
+
 
 

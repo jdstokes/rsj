@@ -22,7 +22,7 @@ function varargout = Active_subplot_roi2(varargin)
 
 % Edit the above text to modify the response to help Active_subplot_roi2
 
-% Last Modified by GUIDE v2.5 14-Mar-2016 20:16:46
+% Last Modified by GUIDE v2.5 16-Jun-2016 14:35:09
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -57,46 +57,57 @@ end
 
 
  numMasks = length(handles.C.masks.maskAll);
+ maskAll = FixStrings(handles.C.masks.maskAll,{'.nii','ash_','_'},{'','',' '});
  cnt=0;
  for i = length(handles.radiobutton):-1:1
      cnt=cnt+1;
     if(cnt <= numMasks)
-    handles.radiobutton(i).String = handles.C.masks.maskAll{cnt};
+    handles.TrueMaskName(i) = handles.C.masks.maskAll(cnt);
+    handles.radiobutton(i).String = maskAll{cnt};
     handles.radiobutton(i).Value = handles.C.masks.mask2inc(cnt);
     else
         delete(handles.radiobutton(i));
     end
  end
   
-
-handles.output = hObject;
-% Update handles structure
+%%Update handles structure
 guidata(hObject, handles);
+
+%%Wait to output
+uiwait(hObject);
+
 end
 
 % --- Outputs from this function are returned to the command line.
 function varargout = Active_subplot_roi2_OutputFcn(hObject, eventdata, handles) 
 varargout{1} = handles.C;
+close(handles.figure1);
 end
 
 function radiobutton_Callback(hObject, eventdata, handles)
-[handles]=SaveVals(handles,hObject);
 guidata(hObject, handles);
 end
 
 
 function close_Callback(hObject, eventdata, handles)
-close(handles.figure1);
+[handles]=SaveVals(handles);
+guidata(hObject, handles);
+uiresume(handles.figure1);
 end
 
 
 function radiobutton_DeleteFcn(hObject, eventdata, handles)
 end
 
-%%
-function handles = SaveVals(handles,hObject)
+%%Save out binary inclusion values for ROIs
+function handles = SaveVals(handles)
 
-id=strcmp(handles.C.masks.maskAll,hObject.String);
-clear hold
-handles.C.masks.mask2inc(id) =hObject.Value;
+    for i = 1:length(handles.radiobutton)
+
+        id = strcmp(handles.C.masks.maskAll,handles.TrueMaskName(i));
+        
+        handles.C.masks.mask2inc(id) =handles.radiobutton(i).Value;
+        
+    end
+
 end

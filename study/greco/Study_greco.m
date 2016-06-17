@@ -5,7 +5,14 @@ classdef Study_greco < rsj_study
 
             S.name = 'greco';
             % Directories
-            S.dir.dir_main = '/Users/jdstokes/Studies';
+            
+            if exist('/Volumes/jdstokes/Studies','dir')
+                S.dir.dir_main = '/Volumes/jdstokes/Studies';
+            elseif exist('/Users/jdstokes/Studies','dir')
+                S.dir.dir_main = '/Users/jdstokes/Studies';
+            else 
+                error('no directory set');
+            end
 %             S.dir.dir_config =      fullfile(S.dir.dir_main,'Studies/Repos/projects/sGR/mlb/');
             S.dir.dir_model =       fullfile(S.dir.dir_main,'/Data/dGR/analysis/rs/ind/');
             S.dir.dir_rs =          fullfile(S.dir.dir_main,'/Data/dGR/analysis/rs/ind/');

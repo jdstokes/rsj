@@ -1,9 +1,9 @@
-function varargout = Active_plot(varargin)
+function varargout = Active_plot2(varargin)
 gui_Singleton = 1;
 gui_State = struct('gui_Name',       mfilename, ...
     'gui_Singleton',  gui_Singleton, ...
-    'gui_OpeningFcn', @Active_plot_OpeningFcn, ...
-    'gui_OutputFcn',  @Active_plot_OutputFcn, ...
+    'gui_OpeningFcn', @Active_plot2_OpeningFcn, ...
+    'gui_OutputFcn',  @Active_plot2_OutputFcn, ...
     'gui_LayoutFcn',  [] , ...
     'gui_Callback',   []);
 if nargin && ischar(varargin{1})
@@ -19,14 +19,14 @@ end
 end
 
 %% Open Plot
-function Active_plot_OpeningFcn(hObj, ed, h, varargin)
+function Active_plot2_OpeningFcn(hObj, ed, h, varargin)
 
 h = SetupStudy(h,1);
 h.output = hObj;
 guidata(hObj, h);
 end
 %% Output
-function varargout = Active_plot_OutputFcn(hObj, ed, h) %#ok<*INUSL>
+function varargout = Active_plot2_OutputFcn(hObj, ed, h) %#ok<*INUSL>
 varargout{1} = h.output;
 end
 %% Close request
@@ -40,9 +40,11 @@ end
 %% GetScores
 function update_pb_Callback(hObj, ed, h) %#ok<*DEFNU>
 
-cla(h.axes1,'reset');
-axes(h.axes1);
-axis off
+% cla(h.axes1,'reset');
+% axes(h.axes1);
+% axis off
+figure('position',[66 148 1563 807]);
+
 if ~length(h.listboxComp.String)==0
     
     

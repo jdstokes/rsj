@@ -19,7 +19,7 @@ else
     error('bad input')
 end
     
-modules = {'ASHS2nii','rsj_spm_fixmasks2','Maskbetas','Calcrs'};
+modules = {'rsj_spm_model'};
 
 subjects= {
         'S1_A'
@@ -114,9 +114,9 @@ end
  
  switch opts
      case 'model'
-         options.spm_smooth = {'s2ra','s1ra','ra','s3ra'};
+%          options.spm_smooth = {'s2ra','s1ra','ra','s3ra'};
          options.spm_mask = {'m3','m1','m0'};
-         options.spm_hpf ={50,128};
+         options.spm_hpf ={45,55,60};
          options.spm_modelName = {'standard_ST_mr'};
      case 'smooth'
          options.spm_smooth = {};

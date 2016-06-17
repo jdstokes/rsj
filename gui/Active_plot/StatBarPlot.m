@@ -132,13 +132,15 @@ function sig = Compare_within(data,bar_centers,singlesub,legend_label)
     for i = 1 : numGroups
         for j1 = 1 : numElements-1
             for j2 = j1+1 : numElements
-                
+                if  ~(any(isnan(data{i,j1})) || any(isnan(data{i,j2})))
                        if ~singlesub
                         
-                        [h,p,c,t] = ttest(data{i,j1},data{i,j2});
+                      
+                        [h,p,~,~] = ttest(data{i,j1},data{i,j2});
+                    
 
                         elseif singlesub
-                                [h,p,c,t] = ttest2(data{i,j1},data{i,j2});
+                                [h,p,~,~] = ttest2(data{i,j1},data{i,j2});
                         end
                     if h==1
                         sig = 1;
@@ -153,6 +155,7 @@ function sig = Compare_within(data,bar_centers,singlesub,legend_label)
                         end
                         height0 = height0+dh;
                     end
+                end
                
             end
         end

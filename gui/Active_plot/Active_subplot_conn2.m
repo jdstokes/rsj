@@ -24,22 +24,22 @@ end
 function Active_subplot_conn2_OpeningFcn(hObject, eventdata, h, varargin) %#ok<*INUSL>
 
 %For testing purposes go ahead and load a fresh study object
-if isempty(varargin)
-    h.C = Study_greco;
-else
-    h.C = varargin{1};   
-end
+
+h.C = varargin{1};   
+
 h.mask_comp_name={}; 
 h.mask_comp=[];
 
 h.popupmenu1.String = h.C.masks.maskAll;
 h.cnt = 0;
- numMasks = length(h.C.masks.maskAll);
+numMasks = length(h.C.masks.maskAll);
+h.maskAll = FixStrings(h.C.masks.maskAll,{'.nii','ash_','_'},{'','',' '});
+
  cnt=0;
  for i = length(h.radiobutton):-1:1
      cnt=cnt+1;
     if(cnt <= numMasks)
-    h.radiobutton(i).String = h.C.masks.maskAll{cnt};
+    h.radiobutton(i).String = h.maskAll{cnt};
     h.radiobutton(i).Value = h.C.masks.mask2inc(cnt);
     else
         delete(h.radiobutton(i));
@@ -56,11 +56,18 @@ end
 %% Output
 function varargout = Active_subplot_conn2_OutputFcn(hObject, eventdata, h) 
 
+
 varargout{1} =  h.mask_comp_name; 
 varargout{2} = h.mask_comp;
- delete(h.figure1);
+% delete(h.figure1
+delete(hObject);
 end
 
+
+%% Close request
+function figure1_CloseRequestFcn(hObject, eventdata, h)
+uiresume(h.figure1);
+end
 
 
 
@@ -97,6 +104,7 @@ end
 
 
 
+
 %% Other
 
 function h = BuildMaskComp(seed_val,h)
@@ -110,7 +118,7 @@ function h = BuildMaskComp(seed_val,h)
        h.cnt = h.cnt+1;
        h.mask_comp(h.cnt,1) = seed_val;
        h.mask_comp(h.cnt,2) = cnt;
-       h.mask_comp_name{h.cnt,1} = strrep(strrep([h.C.masks.maskAll{seed_val},'-',h.C.masks.maskAll{cnt}],'.nii',''),'_','');
+       h.mask_comp_name{h.cnt,1} = [h.maskAll{seed_val},'-',h.maskAll{i}];
     end
     end
   
@@ -125,6 +133,7 @@ end
 function done_Callback(hObject, eventdata, h)
 
 uiresume(h.figure1);
+guidata(hObject, h);
 
 end
 
