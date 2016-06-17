@@ -19,7 +19,7 @@ else
     error('bad input')
 end
     
-modules = {'rsj_spm_model'};
+modules = {'rsj_spm_supermask_ash'};
 
 subjects= {
         'S1_A'
