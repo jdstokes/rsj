@@ -1,0 +1,654 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>Build_analysis_report</title><meta name="generator" content="MATLAB 8.5"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2016-08-12"><meta name="DC.source" content="Build_analysis_report.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h2>Contents</h2><div><ul><li><a href="#3">Settings.   General settings</a></li><li><a href="#4">ROIS.    Only run these ROIs</a></li><li><a href="#5">Outliers.   Outlier removal modes</a></li><li><a href="#8">Analysis families</a></li><li><a href="#9">Analyses</a></li><li><a href="#10">Local functions</a></li></ul></div><pre class="codeinput"><span class="keyword">function</span> Build_analysis_report
+</pre><pre class="codeinput"><span class="comment">% Output rsj report</span>
+close <span class="string">all</span>
+</pre><h2>Settings.   General settings<a name="3"></a></h2><pre class="codeinput">C = Study_greco2;
+T = load(fullfile(C.dir.tables,<span class="string">'greco_tables.mat'</span>));
+<span class="comment">% C.subjects.subj2run= {'S9_A','S16_A'};</span>
+ C.subjects.subj2run= C.subjects.subj2inc;
+</pre><h2>ROIS.    Only run these ROIs<a name="4"></a></h2><pre class="codeinput">rois ={<span class="string">'ash_left_CA1.nii'</span>;<span class="string">'ash_left_DG.nii'</span>;<span class="string">'ash_right_CA1.nii'</span>;<span class="string">'ash_right_DG.nii'</span>};
+C = SetupROIs(rois,C);
+</pre><h2>Outliers.   Outlier removal modes<a name="5"></a></h2><pre class="codeinput">olOpts = {<span class="string">'none'</span> <span class="string">'global_2SD'</span> <span class="string">'global_3SD'</span> <span class="string">'global_IQR'</span>  <span class="string">'voxel_2SD'</span><span class="keyword">...</span>
+    <span class="string">'voxel_3SD'</span> <span class="string">'voxel_IQR'</span>,<span class="string">'old_3SD'</span>,<span class="string">'old_2SD'</span> };
+</pre><pre class="codeinput">Family_ST_rs(C,T)
+</pre><pre class="codeinput"><span class="keyword">end</span>
+</pre><h2>Analysis families<a name="8"></a></h2><pre class="codeinput"><span class="keyword">function</span> Family_ST_rs(C,T)
+rowIndex = 47;
+curRow = T.rs(rowIndex,:);
+C.scores.rs_ID = curRow.rs_ID;
+
+
+C.scores.mode = <span class="string">'rs_pair_runNorm'</span>; <span class="comment">%'uni' 'rs_pair' 'rs_pair_runNorm'</span>
+C.scores.score_type = <span class="string">'rsz_runNorm'</span>; <span class="comment">%'rs' 'rsz' 'uni_m' 'uni_sd' 'rs_runNorm' 'rsz_runNorm'</span>
+C.scores.OL_type = <span class="string">'global_IQR'</span>;
+
+
+
+STsameVSdiff(C);
+STtrainAll(C);
+STtrainD1(C);
+STtrainD1_pre(C);
+
+STsameVSdiff_correct(C);
+STtrainS_correct(C);
+STtrainAll_correct(C);
+STsameVSdiff_correct(C);
+<span class="keyword">end</span>
+</pre><h2>Analyses<a name="9"></a></h2><pre class="codeinput"><span class="keyword">function</span> STtrainS(C)
+
+
+CI_comp{1}.input{1}.var = {<span class="string">'tt_code'</span>};
+CI_comp{1}.input{1}.val = 0;
+CI_comp{1}.input{2}.var = {<span class="string">'cityTargC'</span>};
+CI_comp{1}.input{2}.val = {<span class="string">'T'</span>};
+
+CI_comp{2}.input{1}.var = {<span class="string">'tt_code'</span>};
+CI_comp{2}.input{1}.val = 0;
+CI_comp{2}.input{2}.var = {<span class="string">'cityTargC'</span>};
+CI_comp{2}.input{2}.val = {<span class="string">'M'</span>};
+
+CI_comp{3}.input{1}.var = {<span class="string">'tt_code'</span>};
+CI_comp{3}.input{1}.val = 0;
+CI_comp{3}.input{2}.var = {<span class="string">'cityTargC'</span>};
+CI_comp{3}.input{2}.val = {<span class="string">'N'</span>};
+
+tts = Input2Str(CI_comp);
+figure(<span class="string">'position'</span>,[1062 516 560 420]);
+GroupBarPlot(C,CI_comp,<span class="string">'within'</span>,tts,C.scores.rs_ID);
+title([<span class="string">'T0 M0 N0'</span>]);
+clear <span class="string">CI_comp</span>
+
+<span class="keyword">end</span>
+
+<span class="keyword">function</span> STtrainS_correct(C)
+
+
+CI_comp{1}.input{1}.var = {<span class="string">'tt_code'</span>};
+CI_comp{1}.input{1}.val = 0;
+CI_comp{1}.input{2}.var = {<span class="string">'cityTargC'</span>};
+CI_comp{1}.input{2}.val = {<span class="string">'T'</span>};
+CI_comp{1}.input{3}.var = {<span class="string">'acc'</span>};
+CI_comp{1}.input{3}.val = 1;
+
+CI_comp{2}.input{1}.var = {<span class="string">'tt_code'</span>};
+CI_comp{2}.input{1}.val = 0;
+CI_comp{2}.input{2}.var = {<span class="string">'cityTargC'</span>};
+CI_comp{2}.input{2}.val = {<span class="string">'M'</span>};
+CI_comp{2}.input{3}.var = {<span class="string">'acc'</span>};
+CI_comp{2}.input{3}.val = 1;
+
+CI_comp{3}.input{1}.var = {<span class="string">'tt_code'</span>};
+CI_comp{3}.input{1}.val = 0;
+CI_comp{3}.input{2}.var = {<span class="string">'cityTargC'</span>};
+CI_comp{3}.input{2}.val = {<span class="string">'N'</span>};
+CI_comp{3}.input{3}.var = {<span class="string">'acc'</span>};
+CI_comp{3}.input{3}.val = 1;
+
+tts = Input2Str(CI_comp);
+figure(<span class="string">'position'</span>,[1062 516 560 420]);
+GroupBarPlot(C,CI_comp,<span class="string">'within'</span>,tts,C.scores.rs_ID);
+title([<span class="string">'T0 M0 N0'</span>]);
+clear <span class="string">CI_comp</span>
+
+<span class="keyword">end</span>
+
+
+
+<span class="keyword">function</span> STtrainD1(C)
+
+
+CI_comp{1}.input{1}.var = {<span class="string">'tt_code'</span>};
+CI_comp{1}.input{1}.val = 1;
+CI_comp{1}.input{2}.var = {<span class="string">'cityTargC'</span>};
+CI_comp{1}.input{2}.val = {<span class="string">'T'</span>};
+
+
+CI_comp{2}.input{1}.var = {<span class="string">'tt_code'</span>};
+CI_comp{2}.input{1}.val = 1;
+CI_comp{2}.input{2}.var = {<span class="string">'cityTargC'</span>};
+CI_comp{2}.input{2}.val = {<span class="string">'N'</span>};
+
+tts = Input2Str(CI_comp);
+figure(<span class="string">'position'</span>,[1062 516 560 420]);
+GroupBarPlot(C,CI_comp,<span class="string">'within'</span>,tts,C.scores.rs_ID);
+title([<span class="string">'TD1 ND1'</span>]);
+clear <span class="string">CI_comp</span>
+
+<span class="keyword">end</span>
+
+
+<span class="keyword">function</span> STtrainD1_pre(C)
+
+
+CI_comp{1}.input{1}.var = {<span class="string">'tt_code'</span>};
+CI_comp{1}.input{1}.val = 1;
+CI_comp{1}.input{2}.var = {<span class="string">'cityTargP'</span>};
+CI_comp{1}.input{2}.val = {<span class="string">'T'</span>};
+
+
+CI_comp{2}.input{1}.var = {<span class="string">'tt_code'</span>};
+CI_comp{2}.input{1}.val = 1;
+CI_comp{2}.input{2}.var = {<span class="string">'cityTargP'</span>};
+CI_comp{2}.input{2}.val = {<span class="string">'N'</span>};
+
+tts = Input2Str(CI_comp);
+figure(<span class="string">'position'</span>,[1062 516 560 420]);
+GroupBarPlot(C,CI_comp,<span class="string">'within'</span>,tts,C.scores.rs_ID);
+title([<span class="string">'TpreD1 NpreD1'</span>]);
+clear <span class="string">CI_comp</span>
+
+<span class="keyword">end</span>
+
+
+<span class="keyword">function</span> STtrainAll(C)
+
+
+
+CI_comp{1}.input{1}.var = {<span class="string">'cityTargC'</span>};
+CI_comp{1}.input{1}.val = {<span class="string">'T'</span>};
+
+
+CI_comp{2}.input{1}.var = {<span class="string">'cityTargC'</span>};
+CI_comp{2}.input{1}.val = {<span class="string">'M'</span>};
+
+
+CI_comp{3}.input{1}.var = {<span class="string">'cityTargC'</span>};
+CI_comp{3}.input{1}.val = {<span class="string">'N'</span>};
+
+tts = Input2Str(CI_comp);
+figure(<span class="string">'position'</span>,[1062 516 560 420]);
+GroupBarPlot(C,CI_comp,<span class="string">'within'</span>,tts,C.scores.rs_ID);
+title([<span class="string">'T M N'</span>]);
+
+clear <span class="string">CI_comp</span>
+
+<span class="keyword">end</span>
+
+<span class="keyword">function</span> STtrainAll_correct(C)
+
+CI_comp{1}.input{1}.var = {<span class="string">'cityTargC'</span>};
+CI_comp{1}.input{1}.val = {<span class="string">'T'</span>};
+CI_comp{1}.input{2}.var = {<span class="string">'acc'</span>};
+CI_comp{1}.input{2}.val = 1;
+
+
+CI_comp{2}.input{1}.var = {<span class="string">'cityTargC'</span>};
+CI_comp{2}.input{1}.val = {<span class="string">'M'</span>};
+CI_comp{2}.input{2}.var = {<span class="string">'acc'</span>};
+CI_comp{2}.input{2}.val = 1;
+
+
+CI_comp{3}.input{1}.var = {<span class="string">'cityTargC'</span>};
+CI_comp{3}.input{1}.val = {<span class="string">'N'</span>};
+CI_comp{3}.input{2}.var = {<span class="string">'acc'</span>};
+CI_comp{3}.input{2}.val = 1;
+
+tts = Input2Str(CI_comp);
+figure(<span class="string">'position'</span>,[1062 516 560 420]);
+GroupBarPlot(C,CI_comp,<span class="string">'within'</span>,tts,C.scores.rs_ID);
+title([<span class="string">'Correct only: T M N'</span>]);
+
+clear <span class="string">CI_comp</span>
+
+<span class="keyword">end</span>
+
+<span class="keyword">function</span> STsameVSdiff(C)
+
+
+CI_comp{1}.input{1}.var = {<span class="string">'tt_code'</span>};
+CI_comp{1}.input{1}.val = 0;
+CI_comp{2}.input{1}.var = {<span class="string">'tt_code'</span>};
+CI_comp{2}.input{1}.val = 1;
+CI_comp{3}.input{1}.var = {<span class="string">'tt_code'</span>};
+CI_comp{3}.input{1}.val = 2;
+tts = Input2Str(CI_comp);
+figure(<span class="string">'position'</span>,[1062 516 560 420]);
+GroupBarPlot(C,CI_comp,<span class="string">'within'</span>,tts,C.scores.rs_ID);
+title([<span class="string">'S D1 D2'</span>]);
+clear <span class="string">CI_comp</span>
+
+<span class="keyword">end</span>
+
+<span class="keyword">function</span> STsameVSdiff_correct(C)
+
+
+CI_comp{1}.input{1}.var = {<span class="string">'tt_code'</span>};
+CI_comp{1}.input{1}.val = 0;
+CI_comp{1}.input{2}.var = {<span class="string">'acc'</span>};
+CI_comp{1}.input{2}.val = 1;
+CI_comp{2}.input{1}.var = {<span class="string">'tt_code'</span>};
+CI_comp{2}.input{1}.val = 1;
+CI_comp{2}.input{2}.var = {<span class="string">'acc'</span>};
+CI_comp{2}.input{2}.val = 1;
+CI_comp{3}.input{1}.var = {<span class="string">'tt_code'</span>};
+CI_comp{3}.input{1}.val = 2;
+CI_comp{3}.input{2}.var = {<span class="string">'acc'</span>};
+CI_comp{3}.input{2}.val = 1;
+tts = Input2Str(CI_comp);
+figure(<span class="string">'position'</span>,[1062 516 560 420]);
+GroupBarPlot(C,CI_comp,<span class="string">'within'</span>,tts,C.scores.rs_ID);
+title([<span class="string">'Correct only: S D1 D2'</span>]);
+clear <span class="string">CI_comp</span>
+
+<span class="keyword">end</span>
+
+
+
+<span class="keyword">function</span> BasicAll(C)
+C.scores.measure = <span class="string">'MPS(pw)'</span>;
+C.scores.OL_type = <span class="string">'none'</span>;
+figure(<span class="string">'position'</span>,[1062 516 560 420]);
+GroupBarPlot_BasicAll(C,C.scores.rs_ID);
+title([<span class="string">''</span>]);
+clear <span class="string">CI_comp</span>
+
+<span class="keyword">end</span>
+</pre><h2>Local functions<a name="10"></a></h2><pre class="codeinput"><span class="keyword">function</span> tts = Input2Str(comp)
+
+
+<span class="keyword">for</span> i = 1:length(comp)
+    s = <span class="string">''</span>;
+    input=comp{i}.input;
+<span class="keyword">for</span> j = 1: length(input)
+    <span class="keyword">if</span> ~isempty(input{j})
+        s = [s,input{j}.var{1}];
+        <span class="keyword">if</span> isnumeric(input{j}.val) || islogical(input{j}.val)
+            s = [s,<span class="string">'_'</span>,num2str(input{j}.val)',<span class="string">'_'</span>];
+        <span class="keyword">elseif</span> iscell(input{j}.val)
+            s = [s,<span class="string">'_'</span>, input{j}.val{:},<span class="string">'_'</span>];
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+<span class="keyword">end</span>
+tts{i} = s(1:end-1);
+<span class="keyword">end</span>
+<span class="keyword">end</span>
+
+
+<span class="keyword">function</span> C = SetupROIs(rois,C)
+C.masks.mask2inc = zeros(1,length(C.masks.maskAll));
+<span class="keyword">for</span> j = 1: length(rois)
+    C.masks.mask2inc(strcmp(rois{j},C.masks.maskAll)) = 1;
+<span class="keyword">end</span>
+C.masks.mask2inc = logical(C.masks.mask2inc);
+<span class="keyword">end</span>
+</pre><pre class="codeoutput error">Error: File: /Volumes/jdstokes/repos/rsj/bin/GroupBarPlot.m Line: 30 Column: 34
+Unbalanced or unexpected parenthesis or bracket.
+
+Error in Build_analysis_report&gt;STsameVSdiff (line 228)
+GroupBarPlot(C,CI_comp,'within',tts,C.scores.rs_ID);
+
+Error in Build_analysis_report&gt;Family_ST_rs (line 44)
+STsameVSdiff(C);
+
+Error in Build_analysis_report (line 24)
+Family_ST_rs(C,T)
+</pre><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2015a</a><br></p></div><!--
+##### SOURCE BEGIN #####
+function Build_analysis_report
+% Output rsj report
+close all
+
+
+
+
+%% Settings.   General settings
+C = Study_greco2;
+T = load(fullfile(C.dir.tables,'greco_tables.mat'));
+% C.subjects.subj2run= {'S9_A','S16_A'};
+ C.subjects.subj2run= C.subjects.subj2inc; 
+
+
+%% ROIS.    Only run these ROIs
+rois ={'ash_left_CA1.nii';'ash_left_DG.nii';'ash_right_CA1.nii';'ash_right_DG.nii'};
+C = SetupROIs(rois,C);
+
+%% Outliers.   Outlier removal modes
+olOpts = {'none' 'global_2SD' 'global_3SD' 'global_IQR'  'voxel_2SD'...
+    'voxel_3SD' 'voxel_IQR','old_3SD','old_2SD' };
+
+%%
+Family_ST_rs(C,T)
+
+
+end
+
+
+
+%% Analysis families
+function Family_ST_rs(C,T)
+rowIndex = 47;
+curRow = T.rs(rowIndex,:);
+C.scores.rs_ID = curRow.rs_ID;
+
+
+C.scores.mode = 'rs_pair_runNorm'; %'uni' 'rs_pair' 'rs_pair_runNorm'
+C.scores.score_type = 'rsz_runNorm'; %'rs' 'rsz' 'uni_m' 'uni_sd' 'rs_runNorm' 'rsz_runNorm'
+C.scores.OL_type = 'global_IQR';
+
+
+
+STsameVSdiff(C);
+STtrainAll(C);
+STtrainD1(C);
+STtrainD1_pre(C);
+
+STsameVSdiff_correct(C);
+STtrainS_correct(C);
+STtrainAll_correct(C);
+STsameVSdiff_correct(C);
+end
+
+
+
+
+%% Analyses
+function STtrainS(C)
+
+
+CI_comp{1}.input{1}.var = {'tt_code'};
+CI_comp{1}.input{1}.val = 0;
+CI_comp{1}.input{2}.var = {'cityTargC'};
+CI_comp{1}.input{2}.val = {'T'};
+
+CI_comp{2}.input{1}.var = {'tt_code'};
+CI_comp{2}.input{1}.val = 0;
+CI_comp{2}.input{2}.var = {'cityTargC'};
+CI_comp{2}.input{2}.val = {'M'};
+
+CI_comp{3}.input{1}.var = {'tt_code'};
+CI_comp{3}.input{1}.val = 0;
+CI_comp{3}.input{2}.var = {'cityTargC'};
+CI_comp{3}.input{2}.val = {'N'};
+
+tts = Input2Str(CI_comp);
+figure('position',[1062 516 560 420]);
+GroupBarPlot(C,CI_comp,'within',tts,C.scores.rs_ID);
+title(['T0 M0 N0']);
+clear CI_comp
+
+end
+
+function STtrainS_correct(C)
+
+
+CI_comp{1}.input{1}.var = {'tt_code'};
+CI_comp{1}.input{1}.val = 0;
+CI_comp{1}.input{2}.var = {'cityTargC'};
+CI_comp{1}.input{2}.val = {'T'};
+CI_comp{1}.input{3}.var = {'acc'};
+CI_comp{1}.input{3}.val = 1;
+
+CI_comp{2}.input{1}.var = {'tt_code'};
+CI_comp{2}.input{1}.val = 0;
+CI_comp{2}.input{2}.var = {'cityTargC'};
+CI_comp{2}.input{2}.val = {'M'};
+CI_comp{2}.input{3}.var = {'acc'};
+CI_comp{2}.input{3}.val = 1;
+
+CI_comp{3}.input{1}.var = {'tt_code'};
+CI_comp{3}.input{1}.val = 0;
+CI_comp{3}.input{2}.var = {'cityTargC'};
+CI_comp{3}.input{2}.val = {'N'};
+CI_comp{3}.input{3}.var = {'acc'};
+CI_comp{3}.input{3}.val = 1;
+
+tts = Input2Str(CI_comp);
+figure('position',[1062 516 560 420]);
+GroupBarPlot(C,CI_comp,'within',tts,C.scores.rs_ID);
+title(['T0 M0 N0']);
+clear CI_comp
+
+end
+
+
+
+function STtrainD1(C)
+
+
+CI_comp{1}.input{1}.var = {'tt_code'};
+CI_comp{1}.input{1}.val = 1;
+CI_comp{1}.input{2}.var = {'cityTargC'};
+CI_comp{1}.input{2}.val = {'T'};
+
+
+CI_comp{2}.input{1}.var = {'tt_code'};
+CI_comp{2}.input{1}.val = 1;
+CI_comp{2}.input{2}.var = {'cityTargC'};
+CI_comp{2}.input{2}.val = {'N'};
+
+tts = Input2Str(CI_comp);
+figure('position',[1062 516 560 420]);
+GroupBarPlot(C,CI_comp,'within',tts,C.scores.rs_ID);
+title(['TD1 ND1']);
+clear CI_comp
+
+end
+
+
+function STtrainD1_pre(C)
+
+
+CI_comp{1}.input{1}.var = {'tt_code'};
+CI_comp{1}.input{1}.val = 1;
+CI_comp{1}.input{2}.var = {'cityTargP'};
+CI_comp{1}.input{2}.val = {'T'};
+
+
+CI_comp{2}.input{1}.var = {'tt_code'};
+CI_comp{2}.input{1}.val = 1;
+CI_comp{2}.input{2}.var = {'cityTargP'};
+CI_comp{2}.input{2}.val = {'N'};
+
+tts = Input2Str(CI_comp);
+figure('position',[1062 516 560 420]);
+GroupBarPlot(C,CI_comp,'within',tts,C.scores.rs_ID);
+title(['TpreD1 NpreD1']);
+clear CI_comp
+
+end
+
+
+function STtrainAll(C)
+
+
+
+CI_comp{1}.input{1}.var = {'cityTargC'};
+CI_comp{1}.input{1}.val = {'T'};
+
+
+CI_comp{2}.input{1}.var = {'cityTargC'};
+CI_comp{2}.input{1}.val = {'M'};
+
+
+CI_comp{3}.input{1}.var = {'cityTargC'};
+CI_comp{3}.input{1}.val = {'N'};
+
+tts = Input2Str(CI_comp);
+figure('position',[1062 516 560 420]);
+GroupBarPlot(C,CI_comp,'within',tts,C.scores.rs_ID);
+title(['T M N']);
+
+clear CI_comp
+
+end
+
+function STtrainAll_correct(C)
+
+CI_comp{1}.input{1}.var = {'cityTargC'};
+CI_comp{1}.input{1}.val = {'T'};
+CI_comp{1}.input{2}.var = {'acc'};
+CI_comp{1}.input{2}.val = 1;
+
+
+CI_comp{2}.input{1}.var = {'cityTargC'};
+CI_comp{2}.input{1}.val = {'M'};
+CI_comp{2}.input{2}.var = {'acc'};
+CI_comp{2}.input{2}.val = 1;
+
+
+CI_comp{3}.input{1}.var = {'cityTargC'};
+CI_comp{3}.input{1}.val = {'N'};
+CI_comp{3}.input{2}.var = {'acc'};
+CI_comp{3}.input{2}.val = 1;
+
+tts = Input2Str(CI_comp);
+figure('position',[1062 516 560 420]);
+GroupBarPlot(C,CI_comp,'within',tts,C.scores.rs_ID);
+title(['Correct only: T M N']);
+
+clear CI_comp
+
+end
+
+function STsameVSdiff(C)
+
+
+CI_comp{1}.input{1}.var = {'tt_code'};
+CI_comp{1}.input{1}.val = 0;
+CI_comp{2}.input{1}.var = {'tt_code'};
+CI_comp{2}.input{1}.val = 1;
+CI_comp{3}.input{1}.var = {'tt_code'};
+CI_comp{3}.input{1}.val = 2;
+tts = Input2Str(CI_comp);
+figure('position',[1062 516 560 420]);
+GroupBarPlot(C,CI_comp,'within',tts,C.scores.rs_ID);
+title(['S D1 D2']);
+clear CI_comp
+
+end
+
+function STsameVSdiff_correct(C)
+
+
+CI_comp{1}.input{1}.var = {'tt_code'};
+CI_comp{1}.input{1}.val = 0;
+CI_comp{1}.input{2}.var = {'acc'};
+CI_comp{1}.input{2}.val = 1;
+CI_comp{2}.input{1}.var = {'tt_code'};
+CI_comp{2}.input{1}.val = 1;
+CI_comp{2}.input{2}.var = {'acc'};
+CI_comp{2}.input{2}.val = 1;
+CI_comp{3}.input{1}.var = {'tt_code'};
+CI_comp{3}.input{1}.val = 2;
+CI_comp{3}.input{2}.var = {'acc'};
+CI_comp{3}.input{2}.val = 1;
+tts = Input2Str(CI_comp);
+figure('position',[1062 516 560 420]);
+GroupBarPlot(C,CI_comp,'within',tts,C.scores.rs_ID);
+title(['Correct only: S D1 D2']);
+clear CI_comp
+
+end
+
+
+
+function BasicAll(C)
+C.scores.measure = 'MPS(pw)';
+C.scores.OL_type = 'none';
+figure('position',[1062 516 560 420]);
+GroupBarPlot_BasicAll(C,C.scores.rs_ID);
+title(['']);
+clear CI_comp
+
+end
+
+
+
+%% Local functions
+function tts = Input2Str(comp)
+
+
+for i = 1:length(comp)
+    s = '';
+    input=comp{i}.input;
+for j = 1: length(input)
+    if ~isempty(input{j})
+        s = [s,input{j}.var{1}];
+        if isnumeric(input{j}.val) || islogical(input{j}.val)
+            s = [s,'_',num2str(input{j}.val)','_'];
+        elseif iscell(input{j}.val)
+            s = [s,'_', input{j}.val{:},'_'];
+        end
+    end
+end
+tts{i} = s(1:end-1);
+end
+end
+
+
+function C = SetupROIs(rois,C)
+C.masks.mask2inc = zeros(1,length(C.masks.maskAll));
+for j = 1: length(rois)
+    C.masks.mask2inc(strcmp(rois{j},C.masks.maskAll)) = 1;
+end
+C.masks.mask2inc = logical(C.masks.mask2inc);
+end
+##### SOURCE END #####
+--></body></html>

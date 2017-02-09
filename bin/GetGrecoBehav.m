@@ -1,7 +1,13 @@
-    function [scores,tt_size_all] = greco_behav_scores(subjects,score_name)
+function [scores,numTrials] = GetGrecoBehav(C,score_name)
+% tts = {'all','nan','corr','incorr','s','d','d1','d2','d3','d2or3',...
+%     'd1or2','c1','c2','c3','c2or3','t','m','n','torm','norm','tpre',...
+%     'npre','tpre','npre','c1pre','c3pre','r1','r2','r3','r4','r2or3or4',...
+%     'r3or4','r1or2', 't_prepost','n_prepost'};
 
-%Location of Greco enc behavdata
-% foldpath = '/Volumes/Jared/Data/dGR/behav/behav_scan/';
+
+
+foldpath = C.dir.dat_behav;
+subjects = C.subjects.subj2inc;
 
 for curSubj = 1:length(subjects)
     
@@ -11,7 +17,7 @@ for curSubj = 1:length(subjects)
      S=strsplit(subjects{curSubj},'_');
      
     %Load behavioral data
-    [DATA,HDRS] = LoadBehav([foldpath,subjects{curSubj},'/',subjects{curSubj},'.txt']); 
+    [DATA,HDRS] = LoadBehav(fullfile(foldpath,subjects{curSubj},[subjects{curSubj},'.txt'])); 
     
     %Specific variables importing for parsing trials
     col.col_run =  find(~cellfun(@isempty,strfind(HDRS,'run_num')));
@@ -28,7 +34,7 @@ for curSubj = 1:length(subjects)
     %Calculate scores
     [score,tt_size] = CalcScores(score_name,code); 
     scores(curSubj,1) = score;
-    tt_size_all(curSubj,1:2) = tt_size;
+    numTrials(curSubj,1:2) = tt_size;
     clear score tt_size
     
     
@@ -44,9 +50,10 @@ end
 fclose(fid);
 
 function [code]=BuildCodes(DATA,col,S)
-tts = {'all','nan','corr','incorr','s','d','d1','d2','d3','d2or3','d1or2',...
-    'c1','c2','c3','c2or3','t','m','n','torm','norm','tpre','npre','r1','r2','r3','r4',...
-    'r2or3or4','r3or4','r1or2'};
+tts = {'all','nan','corr','incorr','s','d','d1','d2','d3','d2or3',...
+    'd1or2','c1','c2','c3','c2or3','t','m','n','torm','norm','tpre',...
+    'npre','tpre','npre','c1pre','c3pre','r1','r2','r3','r4','r2or3or4',...
+    'r3or4','r1or2', 't_prepost','n_prepost'};
 
 code = struct;
 for curtt = 1: length(tts)
@@ -86,43 +93,65 @@ for curtr = 1: length(DATA{1})
             && (cityDiff==1 ||cityDiff==2)),              code.d1or2(curtr)   = 1;end
     %c1
     if(strcmp(DATA{col.col_currCity}(curtr),'1')),      code.c1(curtr) = 1;end
+    
+    
+    %% t or n
     if(strcmp(DATA{col.col_currCity}(curtr),'1') && strcmp(S(2),'A'))
         code.t(curtr) = 1;
         code.torm(curtr) = 1;
+        code.t_prepost(curtr) = 1;
     end
     if(strcmp(DATA{col.col_currCity}(curtr),'1') && strcmp(S(2),'B'))
         code.n(curtr) = 1;
-        code.norm(curtr) = 1;    
+        code.norm(curtr) = 1;  
+        code.n_prepost(curtr) = 1;
     end
+    
+     
     if curtr>1
         if(strcmp(DATA{col.col_currCity}(curtr-1),'1') && strcmp(S(2),'A'))
             code.tpre(curtr) = 1;
+            code.c1pre(curtr) = 1;
+            code.t_prepost(curtr) = 1;
+
         end
         if(strcmp(DATA{col.col_currCity}(curtr-1),'1') && strcmp(S(2),'B'))
             code.npre(curtr) = 1;
+            code.c1pre(curtr) = 1;
+            code.n_prepost(curtr) = 1;
+
         end
     end
 
-    %c3
-    if(strcmp(DATA{col.col_currCity}(curtr),'3')),      code.c3(curtr) = 1;end
+ 
+    if(strcmp(DATA{col.col_currCity}(curtr),'3')),  code.c3(curtr) = 1;end
     
     if(strcmp(DATA{col.col_currCity}(curtr),'3') && strcmp(S(2),'A')) 
         code.n(curtr) = 1;
         code.norm(curtr) = 1;
+        code.n_prepost(curtr) = 1;
+
     end
     if curtr>1
     if(strcmp(DATA{col.col_currCity}(curtr-1),'3') && strcmp(S(2),'B')) 
         code.tpre(curtr) = 1;
+        code.c3pre(curtr) = 1;
+        code.t_prepost(curtr) = 1;
+
     end
     
     if(strcmp(DATA{col.col_currCity}(curtr-1),'3') && strcmp(S(2),'A')) 
         code.npre(curtr) = 1;
+        code.c3pre(curtr) = 1;
+        code.n_prepost(curtr) = 1;
+
     end
     end
         
     if(strcmp(DATA{col.col_currCity}(curtr),'3') && strcmp(S(2),'B')) 
         code.t(curtr) = 1;
         code.torm(curtr) = 1;
+        code.t_prepost(curtr) = 1;
     end
    
     %c2
@@ -147,6 +176,8 @@ for curtr = 1: length(DATA{1})
     if(strcmp(DATA{col.col_run}(curtr),'3')||strcmp(DATA{col.col_run}(curtr),'4')),      code.r3or4(curtr) = 1;end
     if(strcmp(DATA{col.col_run}(curtr),'1')||strcmp(DATA{col.col_run}(curtr),'2')),      code.r1or2(curtr) = 1;end
 
+
+    
 end
 
 

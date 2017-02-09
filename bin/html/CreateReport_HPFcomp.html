@@ -1,0 +1,744 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>CreateReport_HPFcomp</title><meta name="generator" content="MATLAB 8.5"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2016-08-09"><meta name="DC.source" content="CreateReport_HPFcomp.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h2>Contents</h2><div><ul><li><a href="#2">Create Analysis Report - HPF</a></li><li><a href="#3">Initialization</a></li><li><a href="#4">==================== Part 1: Run Analyses ====================</a></li><li><a href="#5">Part 2</a></li><li><a href="#6">Part 3</a></li><li><a href="#8">==================== Analysis All  ====================</a></li><li><a href="#9">====================            ====================</a></li><li><a href="#10">==================== Local Functions ====================</a></li></ul></div><pre class="codeinput"><span class="keyword">function</span> CreateReport_HPFcomp
+</pre><h2>Create Analysis Report - HPF<a name="2"></a></h2><pre class="codeinput"><span class="comment">% Overview</span>
+<span class="comment">% --------</span>
+<span class="comment">%</span>
+<span class="comment">%   CalcMeans.  Calculate mean betas and ResMS.nii.</span>
+<span class="comment">%   ChooseModels. Decide which models to compare</span>
+<span class="comment">%   PlotResults. Filter date by Choose models and plot results</span>
+<span class="comment">%   GetModelID</span>
+</pre><h2>Initialization<a name="3"></a></h2><pre class="codeinput">close <span class="string">all</span>; clc;
+C = Study_greco2;
+T = load(fullfile(C.dir.tables,<span class="string">'greco_tables.mat'</span>));
+C.subjects.subj2run= C.subjects.subj2inc(1:2);
+</pre><h2>==================== Part 1: Run Analyses ====================<a name="4"></a></h2><pre class="codeinput">AnalysisAll(C,T,<span class="string">'uni'</span>) <span class="comment">%Uni / All</span>
+AnalysisAll(C,T, <span class="string">'rs'</span>) <span class="comment">%RS / All</span>
+</pre><img vspace="5" hspace="5" src="CreateReport_HPFcomp_01.png" alt=""> <img vspace="5" hspace="5" src="CreateReport_HPFcomp_02.png" alt=""> <h2>Part 2<a name="5"></a></h2><pre class="codeinput">AnalysisSD1D2(C,T,<span class="string">'uni'</span>) <span class="comment">%Uni / S D1 D2</span>
+AnalysisSD1D2(C,T, <span class="string">'rs'</span>) <span class="comment">%RS / S D1 D2</span>
+</pre><img vspace="5" hspace="5" src="CreateReport_HPFcomp_03.png" alt=""> <img vspace="5" hspace="5" src="CreateReport_HPFcomp_04.png" alt=""> <img vspace="5" hspace="5" src="CreateReport_HPFcomp_05.png" alt=""> <img vspace="5" hspace="5" src="CreateReport_HPFcomp_06.png" alt=""> <h2>Part 3<a name="6"></a></h2><pre class="codeinput">AnalysisTMN(C,T,<span class="string">'uni'</span>) <span class="comment">%Uni / T M N</span>
+AnalysisTMN(C,T,<span class="string">'rs'</span>) <span class="comment">%RS / T M N</span>
+</pre><pre class="codeoutput">updating plot...
+loading S1_A
+loading S2_B
+updating plot...
+loading S1_A
+loading S2_B
+updating plot...
+loading S1_A
+loading S2_B
+updating plot...
+loading S1_A
+loading S2_B
+updating plot...
+loading S1_A
+updating plot...
+loading S1_A
+updating plot...
+loading S1_A
+updating plot...
+loading S1_A
+updating plot...
+loading S1_A
+updating plot...
+loading S1_A
+updating plot...
+loading S1_A
+updating plot...
+loading S1_A
+updating plot...
+loading S1_A
+updating plot...
+loading S1_A
+updating plot...
+loading S1_A
+loading S2_B
+updating plot...
+loading S1_A
+loading S2_B
+updating plot...
+loading S1_A
+loading S2_B
+updating plot...
+loading S1_A
+loading S2_B
+updating plot...
+loading S1_A
+updating plot...
+loading S1_A
+updating plot...
+loading S1_A
+updating plot...
+loading S1_A
+updating plot...
+loading S1_A
+updating plot...
+loading S1_A
+updating plot...
+loading S1_A
+updating plot...
+loading S1_A
+updating plot...
+loading S1_A
+updating plot...
+loading S1_A
+</pre><img vspace="5" hspace="5" src="CreateReport_HPFcomp_07.png" alt=""> <img vspace="5" hspace="5" src="CreateReport_HPFcomp_08.png" alt=""> <img vspace="5" hspace="5" src="CreateReport_HPFcomp_09.png" alt=""> <img vspace="5" hspace="5" src="CreateReport_HPFcomp_10.png" alt=""> <img vspace="5" hspace="5" src="CreateReport_HPFcomp_11.png" alt=""> <img vspace="5" hspace="5" src="CreateReport_HPFcomp_12.png" alt=""> <img vspace="5" hspace="5" src="CreateReport_HPFcomp_13.png" alt=""> <img vspace="5" hspace="5" src="CreateReport_HPFcomp_14.png" alt=""> <pre class="codeinput"><span class="keyword">end</span>
+</pre><h2>==================== Analysis All  ====================<a name="8"></a></h2><pre class="codeinput">    <span class="keyword">function</span> AnalysisAll(C,T,mode)
+        rois ={<span class="string">'ash_right_CA1.nii'</span>;<span class="string">'ash_right_DG.nii'</span>};
+        C = SetupROIs(rois,C);
+
+        <span class="keyword">switch</span> mode
+            <span class="keyword">case</span> <span class="string">'uni'</span>
+                C = Configure4uni(C);
+            <span class="keyword">case</span> <span class="string">'rs'</span>
+                C = Configure4rs(C);
+            <span class="keyword">otherwise</span>
+                error(<span class="string">'incorrect mode argument'</span>);
+        <span class="keyword">end</span>
+
+        CI_comp{1}.input{1}.var = {<span class="string">'tt_code'</span>};
+        CI_comp{1}.input{1}.val = [0 1 2];
+
+
+        spec_name = <span class="string">'STris_20'</span>;
+        subjects = C.subjects.subj2run;
+        numScores = height(T.rs);
+
+
+        data =[];
+        legend = {};
+         hpfList = [];
+        <span class="keyword">for</span> cS = 1:numScores
+            scoreRow = T.rs(cS,:);
+            modelRow = GetModelRow(scoreRow,T);
+            <span class="keyword">if</span> ~any(strfind(modelRow.spec_name,spec_name))          <span class="comment">%Skip models</span>
+                <span class="keyword">continue</span>
+            <span class="keyword">end</span>
+
+
+            <span class="keyword">try</span>
+                newScores = GetImgScores(C,CI_comp,scoreRow.rs_ID);
+                data = [data, newScores];
+                legend = [legend;num2str(modelRow.hpf)];
+                hpfList = [hpfList,modelRow.hpf];
+
+            <span class="keyword">end</span>
+
+
+        <span class="keyword">end</span>
+        [~, I]=sort(hpfList);
+        legend = legend(I);
+        data= data(:,I);
+
+        labels = FixStrings(rois,{<span class="string">'.nii'</span>,<span class="string">'ash_'</span>,<span class="string">'_'</span>},{<span class="string">''</span>,<span class="string">''</span>,<span class="string">' '</span>});
+        figure
+        StatBarPlot(data,<span class="string">'within'</span>,labels,<span class="string">'mean beta'</span>,0,legend);
+        title(<span class="string">'Mean betas X HPF'</span>);
+    <span class="keyword">end</span>
+</pre><pre class="codeoutput">updating plot...
+loading S1_A
+loading S2_B
+updating plot...
+loading S1_A
+loading S2_B
+updating plot...
+loading S1_A
+loading S2_B
+updating plot...
+loading S1_A
+loading S2_B
+updating plot...
+loading S1_A
+updating plot...
+loading S1_A
+updating plot...
+loading S1_A
+updating plot...
+loading S1_A
+updating plot...
+loading S1_A
+updating plot...
+loading S1_A
+updating plot...
+loading S1_A
+updating plot...
+loading S1_A
+updating plot...
+loading S1_A
+updating plot...
+loading S1_A
+updating plot...
+loading S1_A
+loading S2_B
+updating plot...
+loading S1_A
+loading S2_B
+updating plot...
+loading S1_A
+loading S2_B
+updating plot...
+loading S1_A
+loading S2_B
+updating plot...
+loading S1_A
+updating plot...
+loading S1_A
+updating plot...
+loading S1_A
+updating plot...
+loading S1_A
+updating plot...
+loading S1_A
+updating plot...
+loading S1_A
+updating plot...
+loading S1_A
+updating plot...
+loading S1_A
+updating plot...
+loading S1_A
+updating plot...
+loading S1_A
+</pre><h2>====================            ====================<a name="9"></a></h2><pre class="codeinput"><span class="keyword">function</span> AnalysisSD1D2(C,T,mode)
+        rois ={<span class="string">'ash_right_CA1.nii'</span>;<span class="string">'ash_right_DG.nii'</span>};
+        C = SetupROIs(rois,C);
+        <span class="keyword">switch</span> mode
+            <span class="keyword">case</span> <span class="string">'uni'</span>
+                C = Configure4uni(C);
+            <span class="keyword">case</span> <span class="string">'rs'</span>
+                C = Configure4rs(C);
+            <span class="keyword">otherwise</span>
+                error(<span class="string">'incorrect mode argument'</span>);
+        <span class="keyword">end</span>
+
+        CI_comp{1}.input{1}.var = {<span class="string">'tt_code'</span>};
+        CI_comp{1}.input{1}.val = [0];
+        CI_comp{2}.input{1}.var = {<span class="string">'tt_code'</span>};
+        CI_comp{2}.input{1}.val = [1];
+        CI_comp{3}.input{1}.var = {<span class="string">'tt_code'</span>};
+        CI_comp{3}.input{1}.val = [2];
+
+        legend = Input2Str(CI_comp);
+
+        spec_name = <span class="string">'STris_20'</span>;
+        subjects = C.subjects.subj2run;
+        numScores = height(T.rs);
+
+        labels = FixStrings(rois,{<span class="string">'.nii'</span>,<span class="string">'ash_'</span>,<span class="string">'_'</span>},{<span class="string">''</span>,<span class="string">''</span>,<span class="string">' '</span>});
+
+
+        data =[];
+        <span class="keyword">for</span> cS = 1:numScores
+            scoreRow = T.rs(cS,:);
+            modelRow = GetModelRow(scoreRow,T);
+            <span class="keyword">if</span> ~any(strfind(modelRow.spec_name,spec_name))          <span class="comment">%Skip models</span>
+                <span class="keyword">continue</span>
+            <span class="keyword">end</span>
+
+
+            <span class="keyword">try</span>
+                newScores = GetImgScores(C,CI_comp,scoreRow.rs_ID);
+                data = newScores;
+                figure
+                StatBarPlot(data,<span class="string">'within'</span>,labels,<span class="string">'mean beta'</span>,0,legend);
+                title([<span class="string">'Mean betas, HPF:'</span>, num2str(modelRow.hpf)]);
+            <span class="keyword">end</span>
+
+        <span class="keyword">end</span>
+
+
+<span class="keyword">end</span>
+
+
+<span class="keyword">function</span> AnalysisTMN(C,T,mode)
+rois ={<span class="string">'ash_right_CA1.nii'</span>;<span class="string">'ash_right_DG.nii'</span>};
+C = SetupROIs(rois,C);
+<span class="keyword">switch</span> mode
+    <span class="keyword">case</span> <span class="string">'uni'</span>
+        C = Configure4uni(C);
+    <span class="keyword">case</span> <span class="string">'rs'</span>
+        C = Configure4rs(C);
+    <span class="keyword">otherwise</span>
+        error(<span class="string">'incorrect mode argument'</span>);
+<span class="keyword">end</span>
+
+
+CI_comp{1}.input{1}.var = {<span class="string">'cityTargC'</span>};
+CI_comp{1}.input{1}.val = {<span class="string">'T'</span>};
+
+
+CI_comp{2}.input{1}.var = {<span class="string">'cityTargC'</span>};
+CI_comp{2}.input{1}.val = {<span class="string">'M'</span>};
+
+
+CI_comp{3}.input{1}.var = {<span class="string">'cityTargC'</span>};
+CI_comp{3}.input{1}.val = {<span class="string">'N'</span>};
+legend = Input2Str(CI_comp);
+
+spec_name = <span class="string">'STris_20'</span>;
+subjects = C.subjects.subj2run;
+numScores = height(T.rs);
+
+labels = FixStrings(rois,{<span class="string">'.nii'</span>,<span class="string">'ash_'</span>,<span class="string">'_'</span>},{<span class="string">''</span>,<span class="string">''</span>,<span class="string">' '</span>});
+
+
+data =[];
+<span class="keyword">for</span> cS = 1:numScores
+    scoreRow = T.rs(cS,:);
+    modelRow = GetModelRow(scoreRow,T);
+    <span class="keyword">if</span> ~any(strfind(modelRow.spec_name,spec_name))          <span class="comment">%Skip models</span>
+        <span class="keyword">continue</span>
+    <span class="keyword">end</span>
+
+
+    <span class="keyword">try</span>
+        newScores = GetImgScores(C,CI_comp,scoreRow.rs_ID);
+        data = newScores;
+        figure
+        StatBarPlot(data,<span class="string">'within'</span>,labels,<span class="string">'mean beta'</span>,0,legend);
+        title([<span class="string">'Mean betas, HPF:'</span>, num2str(modelRow.hpf)]);
+    <span class="keyword">end</span>
+
+<span class="keyword">end</span>
+<span class="keyword">end</span>
+</pre><h2>==================== Local Functions ====================<a name="10"></a></h2><pre class="codeinput"><span class="keyword">function</span> tts = Input2Str(comp)
+
+<span class="keyword">for</span> i = 1:length(comp)
+    s = <span class="string">''</span>;
+    input=comp{i}.input;
+<span class="keyword">for</span> j = 1: length(input)
+    <span class="keyword">if</span> ~isempty(input{j})
+        s = [s,input{j}.var{1}];
+        <span class="keyword">if</span> isnumeric(input{j}.val) || islogical(input{j}.val)
+            s = [s,<span class="string">'_'</span>,num2str(input{j}.val)',<span class="string">'_'</span>];
+        <span class="keyword">elseif</span> iscell(input{j}.val)
+            s = [s,<span class="string">'_'</span>, input{j}.val{:},<span class="string">'_'</span>];
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+<span class="keyword">end</span>
+tts{i} = s(1:end-1);
+<span class="keyword">end</span>
+<span class="keyword">end</span>
+
+
+
+<span class="keyword">function</span> C = SetupROIs(rois,C)
+C.masks.mask2inc = zeros(1,length(C.masks.maskAll));
+<span class="keyword">for</span> j = 1: length(rois)
+    C.masks.mask2inc(strcmp(rois{j},C.masks.maskAll)) = 1;
+<span class="keyword">end</span>
+C.masks.mask2inc = logical(C.masks.mask2inc);
+<span class="keyword">end</span>
+
+
+<span class="keyword">function</span> modelRow = GetModelRow(score_row,T)
+betaIDCell = cellstr(T.betas.beta_ID);
+betaRow = T.betas(strcmp(score_row.beta_ID,betaIDCell),:);
+modelIDCell = cellstr(T.model.model_ID);
+modelRow = T.model(strcmp(betaRow.model_ID,modelIDCell),:);
+<span class="keyword">end</span>
+
+
+
+<span class="keyword">function</span> C = Configure4uni(C)
+C.scores.mode = <span class="string">'uni'</span>;
+C.scores.score_type = <span class="string">'uni_m'</span>;
+C.scores.OL_type = <span class="string">'global_IQR'</span>;
+
+<span class="keyword">end</span>
+<span class="keyword">function</span> C = Configure4rs(C)
+C.scores.mode = <span class="string">'rs_pair'</span>;
+C.scores.score_type = <span class="string">'rsz'</span>;
+C.scores.OL_type = <span class="string">'global_IQR'</span>;
+
+
+<span class="keyword">end</span>
+</pre><pre class="codeoutput">updating plot...
+loading S1_A
+loading S2_B
+updating plot...
+loading S1_A
+loading S2_B
+updating plot...
+loading S1_A
+loading S2_B
+updating plot...
+loading S1_A
+loading S2_B
+updating plot...
+loading S1_A
+updating plot...
+loading S1_A
+updating plot...
+loading S1_A
+updating plot...
+loading S1_A
+updating plot...
+loading S1_A
+updating plot...
+loading S1_A
+updating plot...
+loading S1_A
+updating plot...
+loading S1_A
+updating plot...
+loading S1_A
+updating plot...
+loading S1_A
+updating plot...
+loading S1_A
+loading S2_B
+updating plot...
+loading S1_A
+loading S2_B
+updating plot...
+loading S1_A
+loading S2_B
+updating plot...
+loading S1_A
+loading S2_B
+updating plot...
+loading S1_A
+updating plot...
+loading S1_A
+updating plot...
+loading S1_A
+updating plot...
+loading S1_A
+updating plot...
+loading S1_A
+updating plot...
+loading S1_A
+updating plot...
+loading S1_A
+updating plot...
+loading S1_A
+updating plot...
+loading S1_A
+updating plot...
+loading S1_A
+</pre><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2015a</a><br></p></div><!--
+##### SOURCE BEGIN #####
+function CreateReport_HPFcomp
+%% Create Analysis Report - HPF
+
+% Overview
+% REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH
+%
+%   CalcMeans.  Calculate mean betas and ResMS.nii.
+%   ChooseModels. Decide which models to compare
+%   PlotResults. Filter date by Choose models and plot results
+%   GetModelID
+
+%% Initialization
+close all; clc;
+C = Study_greco2;
+T = load(fullfile(C.dir.tables,'greco_tables.mat'));
+C.subjects.subj2run= C.subjects.subj2inc(1:2);
+
+
+%% ==================== Part 1: Run Analyses ====================
+AnalysisAll(C,T,'uni') %Uni / All
+AnalysisAll(C,T, 'rs') %RS / All
+
+%% Part 2
+AnalysisSD1D2(C,T,'uni') %Uni / S D1 D2
+AnalysisSD1D2(C,T, 'rs') %RS / S D1 D2
+
+%% Part 3
+AnalysisTMN(C,T,'uni') %Uni / T M N
+AnalysisTMN(C,T,'rs') %RS / T M N
+
+ 
+
+
+end
+
+%% ==================== Analysis All  ====================
+
+    function AnalysisAll(C,T,mode)
+        rois ={'ash_right_CA1.nii';'ash_right_DG.nii'};
+        C = SetupROIs(rois,C);
+        
+        switch mode
+            case 'uni'
+                C = Configure4uni(C);
+            case 'rs'
+                C = Configure4rs(C);
+            otherwise
+                error('incorrect mode argument');
+        end
+        
+        CI_comp{1}.input{1}.var = {'tt_code'};
+        CI_comp{1}.input{1}.val = [0 1 2];
+        
+        
+        spec_name = 'STris_20';
+        subjects = C.subjects.subj2run;
+        numScores = height(T.rs);
+        
+        
+        data =[];
+        legend = {};
+         hpfList = [];
+        for cS = 1:numScores
+            scoreRow = T.rs(cS,:);
+            modelRow = GetModelRow(scoreRow,T);
+            if ~any(strfind(modelRow.spec_name,spec_name))          %Skip models
+                continue
+            end
+            
+            
+            try
+                newScores = GetImgScores(C,CI_comp,scoreRow.rs_ID);
+                data = [data, newScores];
+                legend = [legend;num2str(modelRow.hpf)];
+                hpfList = [hpfList,modelRow.hpf];
+
+            end
+            
+            
+        end
+        [~, I]=sort(hpfList);
+        legend = legend(I);
+        data= data(:,I);
+        
+        labels = FixStrings(rois,{'.nii','ash_','_'},{'','',' '});
+        figure
+        StatBarPlot(data,'within',labels,'mean beta',0,legend);
+        title('Mean betas X HPF');
+    end
+
+
+%% ====================            ====================
+function AnalysisSD1D2(C,T,mode)
+        rois ={'ash_right_CA1.nii';'ash_right_DG.nii'};
+        C = SetupROIs(rois,C);
+        switch mode
+            case 'uni'
+                C = Configure4uni(C);
+            case 'rs'
+                C = Configure4rs(C);
+            otherwise
+                error('incorrect mode argument');
+        end
+        
+        CI_comp{1}.input{1}.var = {'tt_code'};
+        CI_comp{1}.input{1}.val = [0];
+        CI_comp{2}.input{1}.var = {'tt_code'};
+        CI_comp{2}.input{1}.val = [1];
+        CI_comp{3}.input{1}.var = {'tt_code'};
+        CI_comp{3}.input{1}.val = [2];
+        
+        legend = Input2Str(CI_comp);
+        
+        spec_name = 'STris_20';
+        subjects = C.subjects.subj2run;
+        numScores = height(T.rs);
+        
+        labels = FixStrings(rois,{'.nii','ash_','_'},{'','',' '});
+
+        
+        data =[];
+        for cS = 1:numScores
+            scoreRow = T.rs(cS,:);
+            modelRow = GetModelRow(scoreRow,T);
+            if ~any(strfind(modelRow.spec_name,spec_name))          %Skip models
+                continue
+            end
+            
+            
+            try
+                newScores = GetImgScores(C,CI_comp,scoreRow.rs_ID);
+                data = newScores;
+                figure
+                StatBarPlot(data,'within',labels,'mean beta',0,legend);
+                title(['Mean betas, HPF:', num2str(modelRow.hpf)]);
+            end
+            
+        end
+        
+        
+end 
+
+
+function AnalysisTMN(C,T,mode)
+rois ={'ash_right_CA1.nii';'ash_right_DG.nii'};
+C = SetupROIs(rois,C);
+switch mode
+    case 'uni'
+        C = Configure4uni(C);
+    case 'rs'
+        C = Configure4rs(C);
+    otherwise
+        error('incorrect mode argument');
+end
+
+
+CI_comp{1}.input{1}.var = {'cityTargC'};
+CI_comp{1}.input{1}.val = {'T'};
+
+
+CI_comp{2}.input{1}.var = {'cityTargC'};
+CI_comp{2}.input{1}.val = {'M'};
+
+
+CI_comp{3}.input{1}.var = {'cityTargC'};
+CI_comp{3}.input{1}.val = {'N'};
+legend = Input2Str(CI_comp);
+
+spec_name = 'STris_20';
+subjects = C.subjects.subj2run;
+numScores = height(T.rs);
+
+labels = FixStrings(rois,{'.nii','ash_','_'},{'','',' '});
+
+
+data =[];
+for cS = 1:numScores 
+    scoreRow = T.rs(cS,:);
+    modelRow = GetModelRow(scoreRow,T);
+    if ~any(strfind(modelRow.spec_name,spec_name))          %Skip models
+        continue
+    end
+    
+    
+    try
+        newScores = GetImgScores(C,CI_comp,scoreRow.rs_ID);
+        data = newScores;
+        figure
+        StatBarPlot(data,'within',labels,'mean beta',0,legend);
+        title(['Mean betas, HPF:', num2str(modelRow.hpf)]);
+    end
+    
+end
+end
+
+
+%% ==================== Local Functions ====================
+function tts = Input2Str(comp)
+
+for i = 1:length(comp)
+    s = '';
+    input=comp{i}.input;
+for j = 1: length(input)
+    if ~isempty(input{j})
+        s = [s,input{j}.var{1}];
+        if isnumeric(input{j}.val) || islogical(input{j}.val)
+            s = [s,'_',num2str(input{j}.val)','_'];
+        elseif iscell(input{j}.val)
+            s = [s,'_', input{j}.val{:},'_'];
+        end
+    end
+end
+tts{i} = s(1:end-1);
+end
+end
+
+
+
+function C = SetupROIs(rois,C)
+C.masks.mask2inc = zeros(1,length(C.masks.maskAll));
+for j = 1: length(rois)
+    C.masks.mask2inc(strcmp(rois{j},C.masks.maskAll)) = 1;
+end
+C.masks.mask2inc = logical(C.masks.mask2inc);
+end
+
+
+function modelRow = GetModelRow(score_row,T)
+betaIDCell = cellstr(T.betas.beta_ID);
+betaRow = T.betas(strcmp(score_row.beta_ID,betaIDCell),:);
+modelIDCell = cellstr(T.model.model_ID);
+modelRow = T.model(strcmp(betaRow.model_ID,modelIDCell),:);
+end
+
+
+
+function C = Configure4uni(C)
+C.scores.mode = 'uni';
+C.scores.score_type = 'uni_m';
+C.scores.OL_type = 'global_IQR';
+
+end
+function C = Configure4rs(C)
+C.scores.mode = 'rs_pair';
+C.scores.score_type = 'rsz';
+C.scores.OL_type = 'global_IQR';
+
+
+end
+
+
+
+
+
+
+##### SOURCE END #####
+--></body></html>
